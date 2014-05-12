@@ -1,0 +1,4 @@
+goog.provide('animatejs.Animation');
+
+
+
