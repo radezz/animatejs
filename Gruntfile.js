@@ -2,7 +2,12 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-    "pkg": grunt.file.readJSON('package.json'),
+    pkg: grunt.file.readJSON('package.json'),
+    path: {
+      closure: 'node_modules/closure-library/',
+      src: 'src',
+      tmp: 'tmp'
+    },
     gjslint: {
       options: {
         flags: [
@@ -14,7 +19,7 @@ module.exports = function(grunt) {
         }
       },
       all: {
-        src: 'src/**/*'
+        src: '<%= path.src %>/**/*'
       }
     },
     jshint: {
@@ -28,10 +33,30 @@ module.exports = function(grunt) {
         "sub": true,
         "globals": {
           "goog": true,
-          "animatejs": true
+          "animatejs": true,
+          "describe": true,
+          "expect": true,
+          "spyOn": true,
+          "jasmine": true
         }
       },
       all: 'src/**/*'
+    },
+    jasmine: {
+      options: {
+        vendor: ['<%= path.closure %>/closure/goog/base.js', '<%= path.tmp %>/dependencies.js'],
+        specs: '<%= path.src %>/**/*_spec.js'
+      },
+      test: {
+        options: {
+          outfile: '<%= path.tmp %>/unittests/SpecRunner.html',
+          junit: {
+            path: '<%= path.tmp %>/unittests/',
+            consolidate: true
+          },
+          keepRunner: true
+        }
+      }
     },
     watch: {
       scripts: {
@@ -53,11 +78,11 @@ module.exports = function(grunt) {
     },
     closureDepsWriter: {
       options: {
-        closureLibraryPath: 'node_modules/closure-library/',
+        closureLibraryPath: '<%= path.closure %>',
         root_with_prefix: '"src ../../../../src/"'
       },
       deps: {
-        dest: 'tmp/dependencies.js'
+        dest: '<%= path.tmp %>/dependencies.js'
       }
     }
 
@@ -67,6 +92,7 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', ['jshint', 'gjslint']);
   grunt.registerTask('deps', ['closureDepsWriter']);
   grunt.registerTask('http', ['connect:serve']);
+  grunt.registerTask('test', ['deps', 'jasmine:test']);
 
 
   grunt.loadNpmTasks('grunt-contrib-connect');

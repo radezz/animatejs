@@ -75,6 +75,11 @@ animatejs.util.LinkedList.prototype.getTail = function() {
  */
 animatejs.util.LinkedList.prototype.addElement = function(element, opt_before) {
   'use strict';
+  var ownerList = element.getOwnerList();
+  if (ownerList) {
+    ownerList.unlink(element);
+  }
+
   if (opt_before) {
     element['prev'] = opt_before['prev'];
     element['next'] = opt_before;
@@ -88,6 +93,7 @@ animatejs.util.LinkedList.prototype.addElement = function(element, opt_before) {
     this.tail_ = element;
   }
 
+  element.setOwnerList(this);
   this.length_++;
 };
 
@@ -99,6 +105,13 @@ animatejs.util.LinkedList.prototype.addElement = function(element, opt_before) {
  */
 animatejs.util.LinkedList.prototype.unlink = function(element) {
   'use strict';
+
+  var ownerList = element.getOwnerList();
+  if (ownerList !== this) {
+    ownerList.unlink(element);
+    return;
+  }
+
   if (element['prev'] && element['next']) {
     element['prev']['next'] = element['next'];
     element['next']['prev'] = element['prev'];
@@ -113,6 +126,7 @@ animatejs.util.LinkedList.prototype.unlink = function(element) {
     this.tail_ = null;
   }
 
+  element.setOwnerList(null);
   this.length_--;
 };
 
