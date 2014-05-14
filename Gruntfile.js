@@ -2,7 +2,7 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
+    "pkg": grunt.file.readJSON('package.json'),
     gjslint: {
       options: {
         flags: [
@@ -33,6 +33,24 @@ module.exports = function(grunt) {
       },
       all: 'src/**/*'
     },
+    watch: {
+      scripts: {
+        files: ['src/**/*.js'],
+        tasks: ['lint'],
+        options: {
+          spawn: false
+        }
+      }
+    },
+    connect: {
+      serve: {
+        options: {
+          port: 8000,
+          hostname: "*",
+          keepalive: true
+        }
+      }
+    },
     closureDepsWriter: {
       options: {
         closureLibraryPath: 'node_modules/closure-library/',
@@ -48,7 +66,11 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['closureDepsWriter']);
   grunt.registerTask('lint', ['jshint', 'gjslint']);
   grunt.registerTask('deps', ['closureDepsWriter']);
+  grunt.registerTask('http', ['connect:serve']);
 
+
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-gjslint');
   grunt.loadNpmTasks('grunt-closure-tools');
   grunt.loadNpmTasks('grunt-contrib-clean');
