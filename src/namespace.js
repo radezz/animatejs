@@ -1,6 +1,5 @@
 /**
  * The root namespace
- * @namespace
  */
 goog.provide('animatejs');
 
