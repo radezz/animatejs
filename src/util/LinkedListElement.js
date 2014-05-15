@@ -36,6 +36,7 @@ animatejs.util.LinkedListElement = function(data) {
 /**
  * Function sets owner list for current list element
  * @param {animatejs.util.LinkedList} linkedList
+ * @protected
  */
 animatejs.util.LinkedListElement.prototype.setOwnerList = function(linkedList) {
   'use strict';
@@ -46,6 +47,7 @@ animatejs.util.LinkedListElement.prototype.setOwnerList = function(linkedList) {
 /**
  * Function gets owner list
  * @return {animatejs.util.LinkedList}
+ * @protected
  */
 animatejs.util.LinkedListElement.prototype.getOwnerList = function() {
   'use strict';

@@ -12,7 +12,8 @@ module.exports = function(grunt) {
       options: {
         flags: [
           //'--disable 220' //ignore error code 220 from gjslint
-          '--strict'
+          '--strict',
+          '--max_line_length=120'
         ],
         reporter: {
           name: 'console'
@@ -35,9 +36,12 @@ module.exports = function(grunt) {
           "goog": true,
           "animatejs": true,
           "describe": true,
+          "it": true,
           "expect": true,
           "spyOn": true,
-          "jasmine": true
+          "jasmine": true,
+          "beforeEach": true,
+          "afterEach": true
         }
       },
       all: 'src/**/*'
