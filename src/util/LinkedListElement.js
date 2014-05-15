@@ -5,15 +5,15 @@ goog.provide('animatejs.util.LinkedListElement');
 /**
  * LinkedListElement
  * @constructor
- * @param {*} data
+ * @param {*=} opt_data
  */
-animatejs.util.LinkedListElement = function(data) {
+animatejs.util.LinkedListElement = function(opt_data) {
   'use strict';
 
   /**
    * @type {*}
    */
-  this['data'] = data;
+  this['data'] = opt_data || null;
 
   /**
    * @type {aniamtejs.util.LinkedListElement}

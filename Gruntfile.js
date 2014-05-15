@@ -32,6 +32,7 @@ module.exports = function(grunt) {
         "undef": true,
         "strict": true,
         "sub": true,
+        "browser": true,
         "globals": {
           "goog": true,
           "animatejs": true,
@@ -65,7 +66,7 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: ['src/**/*.js'],
-        tasks: ['lint'],
+        tasks: ['lint', 'test'],
         options: {
           spawn: false
         }

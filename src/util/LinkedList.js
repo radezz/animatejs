@@ -149,6 +149,8 @@ animatejs.util.LinkedList.prototype.unlink = function(element) {
     this.tail_ = null;
   }
 
+  element['next'] = null;
+  element['prev'] = null;
   element.setOwnerList(null);
   this.length_--;
 };
