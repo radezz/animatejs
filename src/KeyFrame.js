@@ -23,13 +23,11 @@ animatejs.KeyFrame = function(at, properties, opt_ease) {
     throw new Error();
   }
 
-  if (!goog.isObject) {
-    throw new TypeError();
-  }
-
   if (opt_ease && !goog.isFunction(opt_ease)) {
     throw new TypeError();
   }
+
+  animatejs.KeyFrame.validateProperties(properties);
 
   animatejs.KeyFrame.superClass_.constructor.call(this, properties);
 
@@ -44,5 +42,28 @@ animatejs.KeyFrame = function(at, properties, opt_ease) {
   this['at'] = at;
 };
 goog.inherits(animatejs.KeyFrame, animatejs.util.LinkedListElement);
+
+
+/**
+ * Function validates propertis for key fram. All propertis
+ * must be numeric.
+ * @param {Object} properties
+ * @export
+ */
+animatejs.KeyFrame.validateProperties = function(properties) {
+  'use strict';
+  var key;
+
+  if (!goog.isObject(properties)) {
+    throw new TypeError();
+  }
+
+  for (key in properties) {
+    if (properties.hasOwnProperty(key) && !goog.isNumber(properties[key])) {
+      throw new TypeError();
+    }
+  }
+};
+
 
 

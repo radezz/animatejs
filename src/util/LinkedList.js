@@ -93,6 +93,9 @@ animatejs.util.LinkedList.prototype.link = function(element, opt_before) {
 
   if (opt_before && this.hasElement(opt_before)) {
     element['prev'] = opt_before['prev'];
+    if (element['prev']) {
+      element['prev']['next'] = element;
+    }
     element['next'] = opt_before;
     opt_before['prev'] = element;
   } else {
