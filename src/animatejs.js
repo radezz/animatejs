@@ -5,4 +5,3 @@ goog.provide('animatejs');
 
 
 goog.require('animatejs.Animation');
-

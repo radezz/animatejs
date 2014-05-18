@@ -52,7 +52,8 @@ goog.inherits(animatejs.KeyFrame, animatejs.util.LinkedListElement);
  */
 animatejs.KeyFrame.validateProperties = function(properties) {
   'use strict';
-  var key;
+  var key,
+      hasProperties = false;
 
   if (!goog.isObject(properties)) {
     throw new TypeError();
@@ -62,6 +63,11 @@ animatejs.KeyFrame.validateProperties = function(properties) {
     if (properties.hasOwnProperty(key) && !goog.isNumber(properties[key])) {
       throw new TypeError();
     }
+    hasProperties = true;
+  }
+
+  if (!hasProperties) {
+    throw new Error();
   }
 };
 

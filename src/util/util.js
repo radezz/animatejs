@@ -50,8 +50,7 @@ animatejs.util.requestAnimationFrame = (function() {
  */
 animatejs.util.cancelAnimationFrame = (function() {
   'use strict';
-  var lastTime = 0,
-      vendors = ['moz', 'webkit'],
+  var vendors = ['moz', 'webkit'],
       cancelFrame = window.cancelAnimationFrame,
       i = vendors.length;
 

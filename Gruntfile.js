@@ -33,6 +33,8 @@ module.exports = function(grunt) {
         "strict": true,
         "sub": true,
         "browser": true,
+        "trailing": true,
+        "unused": true,
         "globals": {
           "goog": true,
           "animatejs": true,
