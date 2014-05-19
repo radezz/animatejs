@@ -14,6 +14,18 @@ animatejs.util.instanceOf = function(obj, ofType) {
 
 
 /**
+ * Function returns current timestamp
+ * @return {number}
+ */
+animatejs.util.now = (function() {
+  'use strict';
+  return goog.isFunction(Date.now) ? Date.now : function() {
+    return (new Date()).getTime();
+  };
+}());
+
+
+/**
  * requestAnimationFrame polyfil
  * @param {function(number)} onFrame
  * @return {number}

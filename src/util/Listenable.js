@@ -119,16 +119,16 @@ animatejs.util.Listenable.prototype.cancel = function(message) {
 /**
  * Function sends message to all listeners
  * @param {string} message
- * @param {Object=} opt_messageObj
  */
-animatejs.util.Listenable.prototype.dispatch = function(message, opt_messageObj) {
+animatejs.util.Listenable.prototype.dispatch = function(message) {
   'use strict';
-  var msgReg = this.registry_[message],
+  var args = Array.prototype.slice.call(arguments, 1),
+      msgReg = this.registry_[message],
       i,
       l;
   if (msgReg) {
     for (i = 0, l = msgReg.length; i < l; i++) {
-      msgReg[i](opt_messageObj);
+      msgReg[i].apply(goog.global, args);
     }
   }
 };

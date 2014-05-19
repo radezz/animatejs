@@ -29,7 +29,12 @@ animatejs.KeyFrameList = function(properties) {
   //init linked list
   animatejs.KeyFrameList.superClass_.constructor.call(this);
 
-  this.frameProperties = [];
+  /**
+  * List of initial properties used to check against
+  * when inserting new key frames
+  * @type {Array.<string>}
+  */
+  this['frameProperties'] = [];
 
   //set list of properties
   this.initFrameProperties_(properties);
@@ -42,15 +47,6 @@ goog.inherits(animatejs.KeyFrameList, animatejs.util.LinkedList);
 
 
 /**
- * List of initial properties used to check against
- * when inserting new key frames
- * @type {Array.<string>}
- * @protected
- */
-animatejs.KeyFrameList.prototype.frameProperties = null;
-
-
-/**
  * Function sets list of animation properties
  * @param {Object} properties
  * @private
@@ -60,7 +56,7 @@ animatejs.KeyFrameList.prototype.initFrameProperties_ = function(properties) {
   var key;
   for (key in properties) {
     if (properties.hasOwnProperty(key)) {
-      this.frameProperties.push(key);
+      this['frameProperties'].push(key);
     }
   }
 };
@@ -75,14 +71,14 @@ animatejs.KeyFrameList.prototype.initFrameProperties_ = function(properties) {
  */
 animatejs.KeyFrameList.prototype.link = function(keyFrame, opt_before) {
   'use strict';
-  var i = this.frameProperties.length;
+  var i = this['frameProperties'].length;
   if (this.getTail()) {
     /*
      * Validate keyFrame properties. Properties in key frames
      * must be
      */
     while (i--) {
-      if (!keyFrame['data'].hasOwnProperty(this.frameProperties[i])) {
+      if (!keyFrame['data'].hasOwnProperty(this['frameProperties'][i])) {
         throw new Error();
       }
     }
@@ -151,7 +147,7 @@ animatejs.KeyFrameList.prototype.remove = animatejs.KeyFrameList.prototype.unlin
  */
 animatejs.KeyFrameList.prototype.disposeInternal = function() {
   'use strict';
-  this.frameProperties = null;
+  this['frameProperties'] = null;
   animatejs.KeyFrameList.superClass_.disposeInternal.call(this);
 };
 

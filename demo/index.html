@@ -6,8 +6,68 @@
         <script>
             goog.require('animatejs');
         </script>
+        <style>
+            body {
+                width: 100%;
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            #animateDiv {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                background-color: red;
+                height: 200px;
+                width: 10px;
+            }
+
+        </style>
     </head>
     <body>
+        <div style="position: relative; width: 100%; height: 200px;">
+            <div id="animateDiv"></div>
+        </div>
+        <script>
 
+            var elem = document.getElementById('animateDiv'),
+                anim = new animatejs.Animation({
+                    "width": 10,
+                    "height": 200,
+                    "left": 0,
+                    "top": 0
+                });
+
+            anim.keyFrame(800, {
+                "width": 10,
+                "height": 200,
+                "left": 400,
+                "top": 0
+            }, animatejs.ease.EASEOUTQUAD).keyFrame(1200, {
+                "width": 400,
+                "height": 200,
+                "left": 0,
+                "top": 0
+            }).on('frame', function(values, changedProperties) {
+                var matrix = 'matrix(1, 0, 0, 1, ' + Math.round(values.left) + ', ' + Math.round(values.top) + ')';
+                elem.style.webkitTransform = matrix;
+                elem.style.mozTransform = matrix;
+                elem.style.transform = matrix;
+                if (changedProperties.indexOf('width') !== -1) {
+                    elem.style.width = values.width + 'px';
+                }
+
+                if (changedProperties.indexOf('height') !== -1) {
+                    elem.style.height = values.height + 'px';
+                }
+
+            });
+
+            window.addEventListener('click', function() {
+                anim.play();
+            });
+
+        </script>
     </body>
 </html>
