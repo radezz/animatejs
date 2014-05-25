@@ -104,6 +104,8 @@ animatejs.Animation.prototype.onBrowserFrame_ = function() {
 
 /**
  * function plays current animation
+ * @export
+ * @return {animatejs.Animation}
  */
 animatejs.Animation.prototype.play = function() {
   'use strict';
@@ -115,19 +117,48 @@ animatejs.Animation.prototype.play = function() {
       this.dispatch('start');
     }
   }
+  return this;
 };
 
 
 /**
  * function stops current animation
+ * @export
+ * @return {animatejs.Animation}
  */
 animatejs.Animation.prototype.stop = function() {
   'use strict';
-  this.running_ = false;
+  this.pause();
   this.animationTime_ = 0;
+  this.loop_ = false;
+  return this;
+};
+
+
+/**
+ * Function pauses the animation
+ * @export
+ * @return {animatejs.Animation}
+ */
+animatejs.Animation.prototype.pause = function() {
+  'use strict';
+  this.running_ = false;
   if (this.frameHandle_) {
     animatejs.util.cancelAnimationFrame.call(window, this.frameHandle_);
   }
+  return this;
+};
+
+
+/**
+ * Function marks animation as a looping animation
+ * @export
+ * @return {animatejs.Animation}
+ */
+animatejs.Animation.prototype.loop = function() {
+  'use strict';
+  this.loop_ = true;
+  return this;
 };
 
 
@@ -140,7 +171,7 @@ animatejs.Animation.prototype.set = function(animationTime) {
   'use strict';
   var head = this['keyFrames'].getHead(),
       keyFrame = this['keyFrames'].getHead();
-
+  this.animationTime_ = animationTime;
   while (keyFrame) {
     if (animationTime >= keyFrame['at']) {
       this.resolveKeyFrame_(keyFrame);
@@ -167,8 +198,7 @@ animatejs.Animation.prototype.set = function(animationTime) {
 animatejs.Animation.prototype.onFrame = function(frameTs) {
   'use strict';
   var frameTime = frameTs - this.lastFrameTs_;
-  this.animationTime_ += frameTime;
-  this.set(this.animationTime_);
+  this.set(this.animationTime_ + frameTime);
   this.lastFrameTs_ = frameTs;
 };
 
@@ -215,8 +245,8 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
     }
   }
 
-  this.dispatch('frame', this['properties'], this.changedProperties_);
-
+  (nextKeyFrame || keyFrame).dispatch('frame', this['properties'], this.changedProperties_);
+  this.dispatch('frame', this['properties'], this.changedProperties_, nextKeyFrame);
 };
 
 

@@ -1,14 +1,19 @@
 goog.provide('animatejs.util.LinkedListElement');
 
+goog.require('animatejs.util.Listenable');
+
 
 
 /**
  * LinkedListElement
  * @constructor
  * @param {*=} opt_data
+ * @extends {animatejs.util.Listenable}
  */
 animatejs.util.LinkedListElement = function(opt_data) {
   'use strict';
+
+  animatejs.util.LinkedListElement.superClass_.constructor.call(this);
 
   /**
    * @type {*}
@@ -31,6 +36,7 @@ animatejs.util.LinkedListElement = function(opt_data) {
    */
   this.list_ = null;
 };
+goog.inherits(animatejs.util.LinkedListElement, animatejs.util.Listenable);
 
 
 /**
@@ -47,7 +53,6 @@ animatejs.util.LinkedListElement.prototype.setOwnerList = function(linkedList) {
 /**
  * Function gets owner list
  * @return {animatejs.util.LinkedList}
- * @protected
  */
 animatejs.util.LinkedListElement.prototype.getOwnerList = function() {
   'use strict';

@@ -6,6 +6,7 @@
         <script>
             goog.require('animatejs');
         </script>
+        <!-- <script src="../tmp/animate.js"></script> -->
         <style>
             body {
                 width: 100%;
@@ -62,7 +63,7 @@
                     elem.style.height = values.height + 'px';
                 }
 
-            });
+            }).loop();
 
             window.addEventListener('click', function() {
                 anim.play();

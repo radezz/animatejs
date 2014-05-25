@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../node_modules/closure-library/closure/goog/base.js"></script>
+        <script src="../tmp/dependencies.js"></script>
+        <script>
+            goog.require('animatejs');
+        </script>
+        <!-- <script src="../tmp/animate.js"></script> -->
+        <link href="css/cube.css" rel="stylesheet" />
+        <style>
+            body {
+                width: 100%;
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <section class="container">
+          <div id="cube">
+            <figure class="front">1</figure>
+            <figure class="back">2</figure>
+            <figure class="right">3</figure>
+            <figure class="left">4</figure>
+            <figure class="top">5</figure>
+            <figure class="bottom">6</figure>
+          </div>
+        </section>
+        <script>
+
+            var elem = document.getElementById('cube'),
+                anim = new animatejs.Animation({
+                    "rotateX": 0,
+                    "rotateY": 0
+                });
+
+            anim.keyFrame(1500, {
+                "rotateX": 360,
+                "rotateY": 360
+            }).on("frame", function(props) {
+                var transform = new animatejs.dom.Transform(elem);
+                transform.rotateX(props.rotateX).rotateY(props.rotateY).apply();
+            }).loop();
+
+            window.addEventListener('click', function() {
+                anim.play();
+            });
+
+        </script>
+    </body>
+</html>

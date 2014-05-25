@@ -91,6 +91,27 @@ module.exports = function(grunt) {
       deps: {
         dest: '<%= path.tmp %>/dependencies.js'
       }
+    },
+    closureBuilder: {
+      options: {
+        closureLibraryPath: 'node_modules/closure-library/',
+        namespaces: 'animatejs',
+        compilerFile: 'node_modules/closure-compiler/lib/vendor/compiler.jar',
+        compile: true,
+        compilerOpts: {
+          compilation_level: 'ADVANCED_OPTIMIZATIONS',
+          language_in: 'ECMASCRIPT5',
+          generate_exports: true,
+          define: ["'goog.DEBUG=false'"],
+          warning_level: 'verbose',
+          summary_detail_level: 3,
+          output_wrapper: '\'(function(){%output%}).call(this);\''
+        }
+      },
+      build: {
+        src: ['src/', 'node_modules/closure-library/'],
+        dest: 'tmp/animate.js'
+      }
     }
 
   });

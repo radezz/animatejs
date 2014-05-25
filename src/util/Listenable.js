@@ -8,6 +8,7 @@ goog.require('goog.Disposable');
  * Listenable is a simple message listener and dispatcher
  * @constructor
  * @extends {goog.Disposable}
+ * @export
  */
 animatejs.util.Listenable = function() {
   'use strict';
@@ -45,6 +46,8 @@ animatejs.util.Listenable.prototype.validateListenerArgs_ = function(message, li
  * Function registers message listener
  * @param {string} message
  * @param {Function} listener
+ * @return {animatejs.util.Listenable}
+ * @export
  */
 animatejs.util.Listenable.prototype.on = function(message, listener) {
   'use strict';
@@ -56,6 +59,7 @@ animatejs.util.Listenable.prototype.on = function(message, listener) {
   }
 
   this.registry_[message].push(listener);
+  return this;
 };
 
 
@@ -64,6 +68,7 @@ animatejs.util.Listenable.prototype.on = function(message, listener) {
  * @param {string} message
  * @param {Function} listener
  * @return {animatejs.util.Listenable}
+ * @export
  */
 animatejs.util.Listenable.prototype.off = function(message, listener) {
   'use strict';
@@ -79,7 +84,6 @@ animatejs.util.Listenable.prototype.off = function(message, listener) {
       }
     }
   }
-
   return this;
 };
 
@@ -90,6 +94,7 @@ animatejs.util.Listenable.prototype.off = function(message, listener) {
  * @param {string} message
  * @param {Function} listener
  * @return {Function} onceListener
+ * @export
  */
 animatejs.util.Listenable.prototype.once = function(message, listener) {
   'use strict';
@@ -119,6 +124,7 @@ animatejs.util.Listenable.prototype.cancel = function(message) {
 /**
  * Function sends message to all listeners
  * @param {string} message
+ * @export
  */
 animatejs.util.Listenable.prototype.dispatch = function(message) {
   'use strict';

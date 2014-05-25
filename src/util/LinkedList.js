@@ -118,7 +118,6 @@ animatejs.util.LinkedList.prototype.link = function(element, opt_before) {
 /**
  * Function removes element from the list
  * @param {animatejs.util.LinkedListElement} element
- * @protected
  */
 animatejs.util.LinkedList.prototype.unlink = function(element) {
   'use strict';
