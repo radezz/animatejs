@@ -21,6 +21,16 @@ describe('animatejs.KeyFrameList', function() {
         new animatejs.KeyFrameList();
       }).toThrow();
     });
+
+    it('creates initial key frame at 0 with provided properties', function() {
+      var kframes = new animatejs.KeyFrameList({
+        'prop': 0,
+        'secondProp': 1
+      });
+
+      expect(kframes.getTail().data['prop']).toBe(0);
+      expect(kframes.getTail().data['secondProp']).toBe(1);
+    });
   });
 
   describe('link', function() {

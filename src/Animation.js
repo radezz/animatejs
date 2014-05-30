@@ -204,6 +204,17 @@ animatejs.Animation.prototype.onFrame = function(frameTs) {
 
 
 /**
+ * Function returns current animation time position
+ * @return {number}
+ * @export
+ */
+animatejs.Animation.prototype.getAtTime = function() {
+  'use strict';
+  return this.animationTime_;
+};
+
+
+/**
  * @param {animatejs.KeyFrame} keyFrame
  * @private
  */
