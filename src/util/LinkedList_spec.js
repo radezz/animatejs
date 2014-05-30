@@ -198,6 +198,23 @@ describe('animatejs.util.LinkedList', function() {
     });
   });
 
+  describe('getArray', function() {
+    it('returns elements as array (properly ordered)', function() {
+      var el1 = new animatejs.util.LinkedListElement(),
+          el2 = new animatejs.util.LinkedListElement(),
+          el3 = new animatejs.util.LinkedListElement(),
+          arr;
+      ll.link(el1);
+      ll.link(el2);
+      ll.link(el3);
+
+      arr = ll.getArray();
+      expect(arr[0]).toBe(el1);
+      expect(arr[1]).toBe(el2);
+      expect(arr[2]).toBe(el3);
+    });
+  });
+
 });
 
 

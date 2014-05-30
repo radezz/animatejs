@@ -75,7 +75,7 @@ animatejs.KeyFrameList.prototype.link = function(keyFrame, opt_before) {
   if (this.getTail()) {
     /*
      * Validate keyFrame properties. Properties in key frames
-     * must be
+     * must be same
      */
     while (i--) {
       if (!keyFrame['data'].hasOwnProperty(this['frameProperties'][i])) {
@@ -114,23 +114,6 @@ animatejs.KeyFrameList.prototype.add = function(keyFrame) {
 
 
   return this;
-};
-
-
-/**
- * Function returns key frames ordered as an array object
- * @return {Array.<animatejs.KeyFrame>}
- * @export
- */
-animatejs.KeyFrameList.prototype.getKeyFrames = function() {
-  'use strict';
-  var frame = this.getTail(),
-      frames = [];
-  while (frame) {
-    frames.push(frame);
-    frame = frame['next'];
-  }
-  return frames;
 };
 
 

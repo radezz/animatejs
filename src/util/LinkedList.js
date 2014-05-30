@@ -187,3 +187,21 @@ animatejs.util.LinkedList.prototype.disposeInternal = function() {
 };
 
 
+/**
+ * Function returns key frames ordered as an array object
+ * @return {Array.<animatejs.KeyFrame>}
+ * @export
+ */
+animatejs.util.LinkedList.prototype.getArray = function() {
+  'use strict';
+  var element = this.getTail(),
+      elements = [];
+  while (element) {
+    elements.push(element);
+    element = element['next'];
+  }
+  return elements;
+};
+
+
+
