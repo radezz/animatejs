@@ -225,6 +225,7 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
       i = propList.length,
       property,
       delta,
+      value,
       progress;
 
   this.changedProperties_.length = 0;
@@ -238,16 +239,17 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
     while (i--) {
       property = propList[i];
       delta = nextKeyFrame['data'][property] - keyFrame['data'][property];
-      this['properties'][property] = keyFrame['data'][property] +
+      value = keyFrame['data'][property] +
           delta * progress;
-      if (delta !== 0) {
+      if (value !== this['properties'][property]) {
         this.changedProperties_.push(property);
       }
+      this['properties'][property] = value;
     }
   } else {
     progress = 1;
     if (goog.isFunction(keyFrame['ease'])) {
-      progress = nextKeyFrame['ease'](progress);
+      progress = keyFrame['ease'](progress);
     }
     while (i--) {
       property = propList[i];
@@ -258,6 +260,16 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
 
   (nextKeyFrame || keyFrame).dispatch('frame', this['properties'], this.changedProperties_);
   this.dispatch('frame', this['properties'], this.changedProperties_, nextKeyFrame);
+};
+
+
+/**
+ * Function destroys this obejcts
+ * @export
+ */
+animatejs.Animation.prototype.destroy = function() {
+  'use strict';
+  goog.dispose(this);
 };
 
 
