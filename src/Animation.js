@@ -109,6 +109,11 @@ animatejs.Animation.prototype.onBrowserFrame_ = function() {
  */
 animatejs.Animation.prototype.play = function() {
   'use strict';
+
+  if (this['keyFrames'].getLength() <= 1) {
+    throw new Error(''); //TODO: errorz!
+  }
+
   if (!this.running_) {
     this.running_ = true;
     this.lastFrameTs_ = animatejs.util.now();
@@ -192,8 +197,20 @@ animatejs.Animation.prototype.set = function(animationTime) {
 
 
 /**
+ * Function returns true if animation is running
+ * @return {boolean}
+ * @export
+ */
+animatejs.Animation.prototype.isRunning = function() {
+  'use strict';
+  return this.running_;
+};
+
+
+/**
  * Function handles browser animation frame
  * @param {number} frameTs
+ * @export
  */
 animatejs.Animation.prototype.onFrame = function(frameTs) {
   'use strict';
@@ -258,8 +275,7 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
     }
   }
 
-  (nextKeyFrame || keyFrame).dispatch('frame', this['properties'], this.changedProperties_);
-  this.dispatch('frame', this['properties'], this.changedProperties_, nextKeyFrame);
+  this.dispatch('frame', this['properties'], this.changedProperties_, keyFrame);
 };
 
 
@@ -278,6 +294,9 @@ animatejs.Animation.prototype.destroy = function() {
  */
 animatejs.Animation.prototype.disposeInternal = function() {
   'use strict';
+  if (this.running_) {
+    this.stop();
+  }
   this['keyFrames'].dispose();
   animatejs.Animation.superClass_.disposeInternal.call(this);
 };

@@ -121,6 +121,7 @@ module.exports = function(grunt) {
   grunt.registerTask('deps', ['closureDepsWriter']);
   grunt.registerTask('http', ['connect:serve']);
   grunt.registerTask('test', ['deps', 'jasmine:test']);
+  grunt.registerTask('build', ['lint', 'deps', 'jasmine:test', 'closureBuilder:build']);
 
 
   grunt.loadNpmTasks('grunt-contrib-connect');

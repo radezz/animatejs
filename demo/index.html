@@ -50,7 +50,7 @@
                 "height": 200,
                 "left": 0,
                 "top": 0
-            }).on('frame', function(values, changedProperties) {
+            }).on('frame', function(values, changedProperties, frame) {
                 var matrix = 'matrix(1, 0, 0, 1, ' + Math.round(values.left) + ', ' + Math.round(values.top) + ')';
 
                 elem.style.webkitTransform = matrix;
@@ -64,7 +64,7 @@
                     elem.style.height = values.height + 'px';
                 }
 
-            }).loop();
+            }).play();
 
             window.addEventListener('click', function() {
                 anim.play();

@@ -7,7 +7,7 @@ goog.provide('animatejs.ease');
  * @return {number}
  * @export
  */
-animatejs.ease.LINEAR = function(p) {
+animatejs.ease.linear = function(p) {
   'use strict';
   return p;
 };
@@ -19,7 +19,7 @@ animatejs.ease.LINEAR = function(p) {
  * @return {number}
  * @export
  */
-animatejs.ease.EASEINQUAD = function(p) {
+animatejs.ease.easeinquad = function(p) {
   'use strict';
   return p * p;
 };
@@ -31,7 +31,7 @@ animatejs.ease.EASEINQUAD = function(p) {
  * @return {number}
  * @export
  */
-animatejs.ease.EASEOUTQUAD = function(p) {
+animatejs.ease.easeoutquad = function(p) {
   'use strict';
   return -p * (p - 2);
 };
@@ -43,7 +43,7 @@ animatejs.ease.EASEOUTQUAD = function(p) {
  * @return {number}
  * @export
  */
-animatejs.ease.EASEINOUTQUINT = function(p) {
+animatejs.ease.easeinoutquint = function(p) {
   'use strict';
   p = 2 * p;
   if (p < 1) {
@@ -60,7 +60,7 @@ animatejs.ease.EASEINOUTQUINT = function(p) {
  * @return {number}
  * @export
  */
-animatejs.ease.EASEOUTCIRC = function(p) {
+animatejs.ease.easeoutcirc = function(p) {
   'use strict';
   return Math.sqrt(2 * p - p * p);
 };
