@@ -135,6 +135,16 @@ animatejs.KeyFrameList.prototype.disposeInternal = function() {
 };
 
 
+/**
+ * Function destroys and cleans up object
+ * @export
+ */
+animatejs.KeyFrameList.prototype.destroy = function() {
+  'use strict';
+  goog.dispose(this);
+};
+
+
 
 
 

@@ -121,6 +121,9 @@ animatejs.Animation.prototype.play = function() {
     if (this.animationTime_ === 0 && !this.loop_) {
       this.dispatch('start');
     }
+  } else {
+    this.stop();
+    this.play();
   }
   return this;
 };
@@ -187,8 +190,11 @@ animatejs.Animation.prototype.set = function(animationTime) {
 
   if (animationTime >= head['at']) {
     if (!this.loop_) {
-      this.stop();
-      this.dispatch('finish');
+      if (this.running_) {
+        this.stop();
+        this.dispatch('finish');
+      }
+      this.animationTime_ = head['at'];
     } else {
       this.animationTime_ = 0;
     }
@@ -297,7 +303,7 @@ animatejs.Animation.prototype.disposeInternal = function() {
   if (this.running_) {
     this.stop();
   }
-  this['keyFrames'].dispose();
+  this['keyFrames'].destroy();
   animatejs.Animation.superClass_.disposeInternal.call(this);
 };
 

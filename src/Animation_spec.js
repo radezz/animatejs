@@ -143,5 +143,73 @@ describe('animatejs.Animation', function() {
     });
   });
 
+  describe('set', function() {
+    it('sets animation to provided time', function() {
+      animation.keyFrame(5, {
+        'prop': 10
+      });
+
+      animation.set(2);
+      expect(animation.properties.prop).toBe(4);
+    });
+
+    it('sets animation time to last key frame if excedded the range', function() {
+      animation.keyFrame(5, {
+        'prop': 10
+      });
+      animation.set(10);
+      expect(animation.getAtTime()).toBe(5);
+    });
+  });
+
+  describe('isRunning', function() {
+    it('returns true if animation is running flase otherwise', function() {
+      animation.keyFrame(1000, {
+        'prop': 10
+      });
+
+      animation.play();
+      expect(animation.isRunning()).toBe(true);
+      animation.stop();
+      expect(animation.isRunning()).toBe(false);
+    });
+  });
+
+  describe('onFrame', function() {
+
+    it('passes frame timestamp into the animation', function() {
+      animation.keyFrame(10, {
+        'prop': 10
+      });
+      animation.play();
+      animation.onFrame(animatejs.util.now() + 5);
+      expect(animation.properties.prop).toBe(5);
+    });
+  });
+
+  describe('getAtTime', function() {
+    it('returns time which animation is currently at', function() {
+      animation.keyFrame(10, {
+        'prop': 10
+      });
+      animation.play();
+      animation.onFrame(animatejs.util.now() + 5);
+      expect(animation.getAtTime()).toBe(5);
+    });
+  });
+
+  describe('destroy', function() {
+    it('stops animation and destroys references', function() {
+      spyOn(animation.keyFrames, 'destroy').and.callThrough();
+      animation.keyFrame(10, {
+        'prop': 10
+      });
+      animation.play();
+      animation.destroy();
+      expect(animation.isRunning()).toBe(false);
+      expect(animation.keyFrames.destroy).toHaveBeenCalled();
+    });
+  });
+
 });
 
