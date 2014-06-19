@@ -124,22 +124,26 @@ animatejs.Animation.prototype.play = function(opt_at) {
     throw new Error(''); //TODO: errorz!
   }
 
-  if (!this.running_) {
-    this.running_ = true;
+  if (this.running_ && !this.paused_) {
+    this.stop();
+    this.play(opt_at);
+  } else {
+
+    if (!this.running_) {
+      this.running_ = true;
+      this.animationTime_ = 0;
+      this.dispatch('start');
+    }
+
+    if (!this.paused_) {
+      this.paused_ = false;
+    }
+
     this.lastFrameTs_ = animatejs.util.now();
-    this.animationTime_ = 0;
     this.frameHandle_ = animatejs.util.requestAnimationFrame.call(window, this.onBrowserFrame_);
-    this.dispatch('start');
     if (goog.isNumber(opt_at)) {
       this.set(opt_at);
     }
-  } else if (this.paused_) {
-    this.paused_ = false;
-    this.lastFrameTs_ = animatejs.util.now();
-    this.frameHandle_ = animatejs.util.requestAnimationFrame.call(window, this.onBrowserFrame_);
-  } else {
-    this.stop();
-    this.play();
   }
 
   return this;
@@ -156,6 +160,7 @@ animatejs.Animation.prototype.stop = function() {
   this.cancelBrowserFrame_();
   this.animationTime_ = 0;
   this.running_ = false;
+  this.paused_ = false;
   return this;
 };
 
