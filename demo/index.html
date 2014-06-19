@@ -40,17 +40,18 @@
                     "top": 0
                 });
 
-            anim.keyFrame(800, {
+            anim.keyFrame(400, {
                 "width": 10,
                 "height": 200,
                 "left": 400,
                 "top": 0
-            }, animatejs.ease.easeoutquad).keyFrame(1200, {
-                "width": 400,
+            }, animatejs.ease.easeoutquad).keyFrame(800, {
+                "width": 410,
                 "height": 200,
                 "left": 0,
                 "top": 0
             }).on('frame', function(values, changedProperties, frame) {
+                console.log('frame');
                 var matrix = 'matrix(1, 0, 0, 1, ' + Math.round(values.left) + ', ' + Math.round(values.top) + ')';
 
                 elem.style.webkitTransform = matrix;
@@ -64,7 +65,11 @@
                     elem.style.height = values.height + 'px';
                 }
 
-            }).play();
+            }).on('start', function() {
+                console.log('start');
+            }).on('finish', function() {
+                console.log('finish');
+            }).play(200);
 
             window.addEventListener('click', function() {
                 anim.play();

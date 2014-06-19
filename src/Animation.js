@@ -67,6 +67,15 @@ animatejs.Animation = function(properties, opt_options) {
    */
   this.running_ = false;
 
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.paused_ = false;
+
+  /**
+   * @private
+   */
   this.onBrowserFrame_ = goog.bind(this.onBrowserFrame_, this);
 
 };
@@ -105,9 +114,10 @@ animatejs.Animation.prototype.onBrowserFrame_ = function() {
 /**
  * function plays current animation
  * @export
+ * @param {number=} opt_at optional start time
  * @return {animatejs.Animation}
  */
-animatejs.Animation.prototype.play = function() {
+animatejs.Animation.prototype.play = function(opt_at) {
   'use strict';
 
   if (this['keyFrames'].getLength() <= 1) {
@@ -117,14 +127,21 @@ animatejs.Animation.prototype.play = function() {
   if (!this.running_) {
     this.running_ = true;
     this.lastFrameTs_ = animatejs.util.now();
+    this.animationTime_ = 0;
     this.frameHandle_ = animatejs.util.requestAnimationFrame.call(window, this.onBrowserFrame_);
-    if (this.animationTime_ === 0 && !this.loop_) {
-      this.dispatch('start');
+    this.dispatch('start');
+    if (goog.isNumber(opt_at)) {
+      this.set(opt_at);
     }
+  } else if (this.paused_) {
+    this.paused_ = false;
+    this.lastFrameTs_ = animatejs.util.now();
+    this.frameHandle_ = animatejs.util.requestAnimationFrame.call(window, this.onBrowserFrame_);
   } else {
     this.stop();
     this.play();
   }
+
   return this;
 };
 
@@ -136,10 +153,21 @@ animatejs.Animation.prototype.play = function() {
  */
 animatejs.Animation.prototype.stop = function() {
   'use strict';
-  this.pause();
+  this.cancelBrowserFrame_();
   this.animationTime_ = 0;
-  this.loop_ = false;
+  this.running_ = false;
   return this;
+};
+
+
+/**
+ * @private
+ */
+animatejs.Animation.prototype.cancelBrowserFrame_ = function() {
+  'use strict';
+  if (this.frameHandle_) {
+    animatejs.util.cancelAnimationFrame.call(window, this.frameHandle_);
+  }
 };
 
 
@@ -150,10 +178,8 @@ animatejs.Animation.prototype.stop = function() {
  */
 animatejs.Animation.prototype.pause = function() {
   'use strict';
-  this.running_ = false;
-  if (this.frameHandle_) {
-    animatejs.util.cancelAnimationFrame.call(window, this.frameHandle_);
-  }
+  this.paused_ = true;
+  this.cancelBrowserFrame_();
   return this;
 };
 
@@ -210,6 +236,17 @@ animatejs.Animation.prototype.set = function(animationTime) {
 animatejs.Animation.prototype.isRunning = function() {
   'use strict';
   return this.running_;
+};
+
+
+/**
+ * Function returns true if animation is paused
+ * @return {boolean}
+ * @export
+ */
+animatejs.Animation.prototype.isPaused = function() {
+  'use strict';
+  return this.paused_;
 };
 
 
