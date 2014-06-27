@@ -115,7 +115,7 @@ module.exports = function(grunt) {
     }
 
   });
-
+  
   grunt.registerTask('default', ['closureDepsWriter']);
   grunt.registerTask('lint', ['jshint', 'gjslint']);
   grunt.registerTask('deps', ['closureDepsWriter']);

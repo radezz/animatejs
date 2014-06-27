@@ -82,7 +82,7 @@ describe('animatejs.Animation', function() {
         expect(endSpy).toHaveBeenCalled();
         expect(endSpy.calls.count()).toBe(1);
         done();
-      }, 120);
+      }, 150);
 
     });
   });
@@ -120,11 +120,11 @@ describe('animatejs.Animation', function() {
             expect(animation.getAtTime()).toBeGreaterThan(atTime);
             expect(frameSpy).toHaveBeenCalled();
             done();
-          });
+          }, 80);
 
-        }, 50);
+        }, 80);
 
-      }, 20);
+      }, 50);
 
     });
   });

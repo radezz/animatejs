@@ -2,7 +2,9 @@ goog.provide('animatejs.Animation');
 
 goog.require('animatejs.KeyFrameList');
 goog.require('animatejs.util');
+goog.require('animatejs.util.IRequestAnimationFrame');
 goog.require('animatejs.util.Listenable');
+goog.require('animatejs.util.Playable');
 goog.require('goog.object');
 
 
@@ -10,21 +12,19 @@ goog.require('goog.object');
 /**
  * Animation
  * @constructor
- * @extends {animatejs.util.Listenable}
+ * @extends {animatejs.util.Playable}
  * @param {Object} properties properties definition end initial values
- * @param {Object=} opt_options
  * @export
  */
-animatejs.Animation = function(properties, opt_options) {
+animatejs.Animation = function(properties) {
   'use strict';
-  var options = opt_options || {};
 
   animatejs.Animation.superClass_.constructor.call(this);
 
   /**
    * @type {animatejs.KeyFrameList}
    */
-  this['keyFrames'] = new animatejs.KeyFrameList(goog.object.clone(properties), options);
+  this['keyFrames'] = new animatejs.KeyFrameList(goog.object.clone(properties));
 
   /**
    * @type {Object}
@@ -38,40 +38,16 @@ animatejs.Animation = function(properties, opt_options) {
   this.changedProperties_ = [];
 
   /**
-   * @type {number}
-   * @private
-   */
-  this.animationTime_ = 0;
-
-  /**
-   * @type {number}
+   * @type {?number}
    * @private
    */
   this.frameHandle_ = null;
 
   /**
-   * @type {number}
+   * @type {?number}
    * @private
    */
   this.lastFrameTs_ = null;
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.loop_ = false;
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.running_ = false;
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.paused_ = false;
 
   /**
    * @private
@@ -79,7 +55,24 @@ animatejs.Animation = function(properties, opt_options) {
   this.onBrowserFrame_ = goog.bind(this.onBrowserFrame_, this);
 
 };
-goog.inherits(animatejs.Animation, animatejs.util.Listenable);
+goog.inherits(animatejs.Animation, animatejs.util.Playable);
+
+
+/**
+ * @type {animatejs.util.IRequestAnimationFrame}
+ * @private
+ */
+animatejs.Animation.prototype.requestFrame_ = animatejs.util;
+
+
+/**
+ * Function sets new frame requester (i.e Scene)
+ * @param {aniamtejs.util.IRequestAnimationFrame} requester
+ */
+animatejs.Animation.prototype.setFrameRequester = function(requester) {
+  'use strict';
+  this.requestFrame_ = requester;
+};
 
 
 /**
@@ -105,8 +98,8 @@ animatejs.Animation.prototype.keyFrame = function(at, properties, opt_ease) {
 animatejs.Animation.prototype.onBrowserFrame_ = function() {
   'use strict';
   this.onFrame(animatejs.util.now());
-  if (this.running_) {
-    this.frameHandle_ = animatejs.util.requestAnimationFrame.call(window, this.onBrowserFrame_);
+  if (this.isRunning()) {
+    this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(window, this.onBrowserFrame_);
   }
 };
 
@@ -124,43 +117,22 @@ animatejs.Animation.prototype.play = function(opt_at) {
     throw new Error(''); //TODO: errorz!
   }
 
-  if (this.running_ && !this.paused_) {
-    this.stop();
-    this.play(opt_at);
-  } else {
-
-    if (!this.running_) {
-      this.running_ = true;
-      this.animationTime_ = 0;
-      this.dispatch('start');
-    }
-
-    if (!this.paused_) {
-      this.paused_ = false;
-    }
-
-    this.lastFrameTs_ = animatejs.util.now();
-    this.frameHandle_ = animatejs.util.requestAnimationFrame.call(window, this.onBrowserFrame_);
-    if (goog.isNumber(opt_at)) {
-      this.set(opt_at);
-    }
-  }
-
+  animatejs.Animation.superClass_.play.call(this, opt_at);
+  this.lastFrameTs_ = animatejs.util.now();
+  this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(window, this.onBrowserFrame_);
   return this;
 };
 
 
 /**
- * function stops current animation
+ * Function stops the animation
  * @export
  * @return {animatejs.Animation}
  */
 animatejs.Animation.prototype.stop = function() {
   'use strict';
+  animatejs.Animation.superClass_.stop.call(this);
   this.cancelBrowserFrame_();
-  this.animationTime_ = 0;
-  this.running_ = false;
-  this.paused_ = false;
   return this;
 };
 
@@ -171,7 +143,7 @@ animatejs.Animation.prototype.stop = function() {
 animatejs.Animation.prototype.cancelBrowserFrame_ = function() {
   'use strict';
   if (this.frameHandle_) {
-    animatejs.util.cancelAnimationFrame.call(window, this.frameHandle_);
+    this.requestFrame_.cancelAnimationFrame.call(window, this.frameHandle_);
   }
 };
 
@@ -183,20 +155,8 @@ animatejs.Animation.prototype.cancelBrowserFrame_ = function() {
  */
 animatejs.Animation.prototype.pause = function() {
   'use strict';
-  this.paused_ = true;
+  animatejs.Animation.superClass_.pause.call(this);
   this.cancelBrowserFrame_();
-  return this;
-};
-
-
-/**
- * Function marks animation as a looping animation
- * @export
- * @return {animatejs.Animation}
- */
-animatejs.Animation.prototype.loop = function() {
-  'use strict';
-  this.loop_ = true;
   return this;
 };
 
@@ -210,7 +170,7 @@ animatejs.Animation.prototype.set = function(animationTime) {
   'use strict';
   var head = this['keyFrames'].getHead(),
       keyFrame = this['keyFrames'].getHead();
-  this.animationTime_ = animationTime;
+  this.atTime = animationTime;
   while (keyFrame) {
     if (animationTime >= keyFrame['at']) {
       this.resolveKeyFrame_(keyFrame);
@@ -220,38 +180,16 @@ animatejs.Animation.prototype.set = function(animationTime) {
   }
 
   if (animationTime >= head['at']) {
-    if (!this.loop_) {
-      if (this.running_) {
+    if (!this.isLooping()) {
+      if (this.isRunning()) {
         this.stop();
         this.dispatch('finish');
       }
-      this.animationTime_ = head['at'];
+      this.atTime = head['at'];
     } else {
-      this.animationTime_ = 0;
+      this.atTime = 0;
     }
   }
-};
-
-
-/**
- * Function returns true if animation is running
- * @return {boolean}
- * @export
- */
-animatejs.Animation.prototype.isRunning = function() {
-  'use strict';
-  return this.running_;
-};
-
-
-/**
- * Function returns true if animation is paused
- * @return {boolean}
- * @export
- */
-animatejs.Animation.prototype.isPaused = function() {
-  'use strict';
-  return this.paused_;
 };
 
 
@@ -263,19 +201,8 @@ animatejs.Animation.prototype.isPaused = function() {
 animatejs.Animation.prototype.onFrame = function(frameTs) {
   'use strict';
   var frameTime = frameTs - this.lastFrameTs_;
-  this.set(this.animationTime_ + frameTime);
+  this.set(this.atTime + frameTime);
   this.lastFrameTs_ = frameTs;
-};
-
-
-/**
- * Function returns current animation time position
- * @return {number}
- * @export
- */
-animatejs.Animation.prototype.getAtTime = function() {
-  'use strict';
-  return this.animationTime_;
 };
 
 
@@ -296,7 +223,7 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
   this.changedProperties_.length = 0;
 
   if (nextKeyFrame) {
-    progress = (this.animationTime_ - keyFrame['at']) / (nextKeyFrame['at'] - keyFrame['at']);
+    progress = (this.atTime - keyFrame['at']) / (nextKeyFrame['at'] - keyFrame['at']);
     progress = progress > 1 ? 1 : progress;
     if (goog.isFunction(nextKeyFrame['ease'])) {
       progress = nextKeyFrame['ease'](progress);
@@ -328,7 +255,9 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
 
 
 /**
- * Function destroys this obejcts
+ * Function destroys this obejcts. After calling destroy object
+ * will not be usable but will be safetly disposed. This will stop
+ * the animation and cleanup all attached listeners and keyframes.
  * @export
  */
 animatejs.Animation.prototype.destroy = function() {
@@ -338,13 +267,12 @@ animatejs.Animation.prototype.destroy = function() {
 
 
 /**
+ * Function manages object disposal, is handled by goog.dispose.
  * @protected
  */
 animatejs.Animation.prototype.disposeInternal = function() {
   'use strict';
-  if (this.running_) {
-    this.stop();
-  }
+  this.stop();
   this['keyFrames'].destroy();
   animatejs.Animation.superClass_.disposeInternal.call(this);
 };

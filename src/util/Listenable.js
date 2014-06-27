@@ -132,7 +132,7 @@ animatejs.util.Listenable.prototype.dispatch = function(message) {
       msgReg = this.registry_[message],
       i,
       l;
-  if (msgReg) {
+  if (msgReg && msgReg.length) {
     for (i = 0, l = msgReg.length; i < l; i++) {
       msgReg[i].apply(goog.global, args);
     }
