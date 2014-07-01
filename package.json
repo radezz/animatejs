@@ -13,9 +13,9 @@
     "grunt-jsdoc": "0.4.0",
     "grunt-combine": "0.8.3",
     "closure-compiler": "~0.2.6",
-    "closure-library": "1.43629075.2",
     "grunt-closure-tools": "~0.9.6",
     "closure-linter-wrapper": "~0.2.9",
-    "grunt-gjslint": "~0.1.4"
+    "grunt-gjslint": "~0.1.4",
+    "obvious-closure-library": "20140401.0.2"
   }
 }
