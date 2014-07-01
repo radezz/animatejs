@@ -120,9 +120,9 @@ describe('animatejs.Animation', function() {
             expect(animation.getAtTime()).toBeGreaterThan(atTime);
             expect(frameSpy).toHaveBeenCalled();
             done();
-          }, 80);
+          }, 100);
 
-        }, 80);
+        }, 100);
 
       }, 50);
 
