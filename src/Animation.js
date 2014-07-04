@@ -37,42 +37,8 @@ animatejs.Animation = function(properties) {
    */
   this.changedProperties_ = [];
 
-  /**
-   * @type {?number}
-   * @private
-   */
-  this.frameHandle_ = null;
-
-  /**
-   * @type {?number}
-   * @private
-   */
-  this.lastFrameTs_ = null;
-
-  /**
-   * @private
-   */
-  this.onBrowserFrame_ = goog.bind(this.onBrowserFrame_, this);
-
 };
 goog.inherits(animatejs.Animation, animatejs.util.Playable);
-
-
-/**
- * @type {animatejs.util.IRequestAnimationFrame}
- * @private
- */
-animatejs.Animation.prototype.requestFrame_ = animatejs.util;
-
-
-/**
- * Function sets new frame requester (i.e Scene)
- * @param {aniamtejs.util.IRequestAnimationFrame} requester
- */
-animatejs.Animation.prototype.setFrameRequester = function(requester) {
-  'use strict';
-  this.requestFrame_ = requester;
-};
 
 
 /**
@@ -92,19 +58,6 @@ animatejs.Animation.prototype.keyFrame = function(at, properties, opt_ease) {
 
 
 /**
- * @private
- * TODO solve high res timestamp
- */
-animatejs.Animation.prototype.onBrowserFrame_ = function() {
-  'use strict';
-  this.onFrame(animatejs.util.now());
-  if (this.isRunning()) {
-    this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(window, this.onBrowserFrame_);
-  }
-};
-
-
-/**
  * function plays current animation
  * @export
  * @param {number=} opt_at optional start time
@@ -118,51 +71,17 @@ animatejs.Animation.prototype.play = function(opt_at) {
   }
 
   animatejs.Animation.superClass_.play.call(this, opt_at);
-  this.lastFrameTs_ = animatejs.util.now();
-  this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(window, this.onBrowserFrame_);
   return this;
 };
 
 
 /**
- * Function stops the animation
- * @export
- * @return {animatejs.Animation}
- */
-animatejs.Animation.prototype.stop = function() {
-  'use strict';
-  animatejs.Animation.superClass_.stop.call(this);
-  this.cancelBrowserFrame_();
-  return this;
-};
-
-
-/**
- * @private
- */
-animatejs.Animation.prototype.cancelBrowserFrame_ = function() {
-  'use strict';
-  if (this.frameHandle_) {
-    this.requestFrame_.cancelAnimationFrame.call(window, this.frameHandle_);
-  }
-};
-
-
-/**
- * Function pauses the animation
- * @export
- * @return {animatejs.Animation}
- */
-animatejs.Animation.prototype.pause = function() {
-  'use strict';
-  animatejs.Animation.superClass_.pause.call(this);
-  this.cancelBrowserFrame_();
-  return this;
-};
-
-
-/**
- * Function sets animation at provided time
+ * Function sets animation at provided time. Time should be a values from the animation
+ * time range between 0 and last key frame time. If the value is greater than the total
+ * animation time it will be narrowed to the maximum animation time value i.e if last
+ * key frame is at 500ms and you call set with 600 animation will be set to state at
+ * 500ms.
+ *
  * @param {number} animationTime
  * @export
  */
@@ -190,19 +109,6 @@ animatejs.Animation.prototype.set = function(animationTime) {
       this.atTime = 0;
     }
   }
-};
-
-
-/**
- * Function handles browser animation frame
- * @param {number} frameTs
- * @export
- */
-animatejs.Animation.prototype.onFrame = function(frameTs) {
-  'use strict';
-  var frameTime = frameTs - this.lastFrameTs_;
-  this.set(this.atTime + frameTime);
-  this.lastFrameTs_ = frameTs;
 };
 
 

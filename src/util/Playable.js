@@ -23,6 +23,24 @@ animatejs.util.Playable = function() {
    * @private
    */
   this.loop_ = false;
+
+  /**
+   * @type {?number}
+   * @private
+   */
+  this.frameHandle_ = null;
+
+  /**
+   * @type {?number}
+   * @private
+   */
+  this.lastFrameTs_ = null;
+
+  /**
+   * @private
+   */
+  this.onFrame_ = goog.bind(this.onFrame_, this);
+
 };
 goog.inherits(animatejs.util.Playable, animatejs.util.Listenable);
 
@@ -36,6 +54,13 @@ animatejs.util.Playable.prototype.atTime = 0;
 
 
 /**
+ * @type {animatejs.util.IRequestAnimationFrame}
+ * @private
+ */
+animatejs.util.Playable.prototype.requestFrame_ = animatejs.util;
+
+
+/**
  * Enumeration of possible 'playable' objects states
  * @enum {number}
  * @export
@@ -44,6 +69,17 @@ animatejs.util.Playable.State = {
   IDLE: 0,
   RUNNING: 1,
   PAUSED: 2
+};
+
+
+/**
+ * @private
+ */
+animatejs.util.Playable.prototype.cancelBrowserFrame_ = function() {
+  'use strict';
+  if (this.frameHandle_) {
+    this.requestFrame_.cancelAnimationFrame.call(window, this.frameHandle_);
+  }
 };
 
 
@@ -71,6 +107,8 @@ animatejs.util.Playable.prototype.play = function(opt_at) {
     }
   }
 
+  this.lastFrameTs_ = animatejs.util.now();
+  this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(window, this.onFrame_);
   return this;
 };
 
@@ -85,6 +123,8 @@ animatejs.util.Playable.prototype.stop = function() {
   this.atTime = 0;
   this.loop_ = false;
   this.state_ = animatejs.util.Playable.State.IDLE;
+  this.cancelBrowserFrame_();
+  this.dispatch('stop');
   return this;
 };
 
@@ -97,6 +137,8 @@ animatejs.util.Playable.prototype.stop = function() {
 animatejs.util.Playable.prototype.pause = function() {
   'use strict';
   this.state_ = animatejs.util.Playable.State.PAUSED;
+  this.cancelBrowserFrame_();
+  this.dispatch('pause');
   return this;
 };
 
@@ -178,5 +220,42 @@ animatejs.util.Playable.prototype.getAtTime = function() {
 animatejs.util.Playable.prototype.getState = function() {
   'use strict';
   return this.state_;
+};
+
+
+/**
+ * Function sets frame requester for the current animation
+ * @param {aniamtejs.util.IRequestAnimationFrame} requester
+ * @protected
+ */
+animatejs.util.Playable.prototype.setFrameRequester = function(requester) {
+  'use strict';
+  this.requestFrame_ = requester;
+};
+
+
+/**
+ * Function handles browser animation frame
+ * @param {number} frameTs
+ * @protected
+ */
+animatejs.util.Playable.prototype.onFrame = function(frameTs) {
+  'use strict';
+  var frameTime = frameTs - this.lastFrameTs_;
+  this.set(this.atTime + frameTime);
+  this.lastFrameTs_ = frameTs;
+};
+
+
+/**
+ * @private
+ * TODO solve high res timestamp
+ */
+animatejs.util.Playable.prototype.onFrame_ = function() {
+  'use strict';
+  this.onFrame(animatejs.util.now());
+  if (this.isRunning()) {
+    this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(window, this.onFrame_);
+  }
 };
 
