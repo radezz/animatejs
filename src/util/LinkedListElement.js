@@ -42,7 +42,6 @@ goog.inherits(animatejs.util.LinkedListElement, animatejs.util.Listenable);
 /**
  * Function sets owner list for current list element
  * @param {animatejs.util.LinkedList} linkedList
- * @protected
  */
 animatejs.util.LinkedListElement.prototype.setOwnerList = function(linkedList) {
   'use strict';

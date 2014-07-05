@@ -1,5 +1,6 @@
 goog.provide('animatejs.util.Playable');
 
+goog.require('animatejs.util.IRequestAnimationFrame');
 goog.require('animatejs.util.Listenable');
 
 
@@ -108,7 +109,8 @@ animatejs.util.Playable.prototype.play = function(opt_at) {
   }
 
   this.lastFrameTs_ = animatejs.util.now();
-  this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(window, this.onFrame_);
+  this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(
+      /** @type {animatejs.util.IRequestAnimationFrame} */(window), this.onFrame_);
   return this;
 };
 
@@ -146,7 +148,7 @@ animatejs.util.Playable.prototype.pause = function() {
 /**
  * Function marks 'playable' as a looping
  * @export
- * @return {animatejs.Animation}
+ * @return {animatejs.util.Playable}
  */
 animatejs.util.Playable.prototype.loop = function() {
   'use strict';
@@ -225,7 +227,7 @@ animatejs.util.Playable.prototype.getState = function() {
 
 /**
  * Function sets frame requester for the current animation
- * @param {aniamtejs.util.IRequestAnimationFrame} requester
+ * @param {animatejs.util.IRequestAnimationFrame} requester
  * @protected
  */
 animatejs.util.Playable.prototype.setFrameRequester = function(requester) {
@@ -255,7 +257,8 @@ animatejs.util.Playable.prototype.onFrame_ = function() {
   'use strict';
   this.onFrame(animatejs.util.now());
   if (this.isRunning()) {
-    this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(window, this.onFrame_);
+    this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(
+        /** @type {animatejs.util.IRequestAnimationFrame} */(window), this.onFrame_);
   }
 };
 
