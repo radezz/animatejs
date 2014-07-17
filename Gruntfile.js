@@ -13,7 +13,8 @@ module.exports = function(grunt) {
         flags: [
           //'--disable 220' //ignore error code 220 from gjslint
           '--strict',
-          '--max_line_length=120'
+          '--max_line_length=120',
+          '--custom_jsdoc_tags=name'
         ],
         reporter: {
           name: 'console'
@@ -115,7 +116,7 @@ module.exports = function(grunt) {
     }
 
   });
-  
+
   grunt.registerTask('default', ['closureDepsWriter']);
   grunt.registerTask('lint', ['jshint', 'gjslint']);
   grunt.registerTask('deps', ['closureDepsWriter']);

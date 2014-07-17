@@ -25,6 +25,9 @@ animatejs.Animation = function(properties) {
    * @type {animatejs.KeyFrameList}
    */
   this['keyFrames'] = new animatejs.KeyFrameList(goog.object.clone(properties));
+  this['keyFrames'].addOnDisposeCallback(function() {
+    this.destroy();
+  }, this);
 
   /**
    * @type {Object}
@@ -36,6 +39,12 @@ animatejs.Animation = function(properties) {
    * @private
    */
   this.changedProperties_ = [];
+
+  /**
+   * @type {animatejs.Scene}
+   * @private
+   */
+  this.parentScene_ = null;
 
 };
 goog.inherits(animatejs.Animation, animatejs.util.Playable);
@@ -183,4 +192,25 @@ animatejs.Animation.prototype.disposeInternal = function() {
   animatejs.Animation.superClass_.disposeInternal.call(this);
 };
 
+
+/**
+ * Function sets provided scene as aniamteion's parent scene
+ * @param {Object} scene
+ * @return {animatejs.Animation}
+ */
+animatejs.Animation.prototype.setParentScene = function(scene) {
+  'use strict';
+  this.parentScene_ = scene;
+  return this;
+};
+
+
+/**
+ * Function returns current animation's parent scene or null
+ * @return {animatejs.Scene}
+ */
+animatejs.Animation.prototype.getParentScene = function() {
+  'use strict';
+  return this.parentScene_;
+};
 

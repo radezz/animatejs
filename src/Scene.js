@@ -1,6 +1,7 @@
 goog.provide('animatejs.Scene');
 
 goog.require('animatejs.Animation');
+goog.require('animatejs.util');
 goog.require('animatejs.util.IRequestAnimationFrame');
 goog.require('animatejs.util.Playable');
 
@@ -39,6 +40,37 @@ goog.inherits(animatejs.Scene, animatejs.util.Playable);
 
 
 /**
+ * Function returns index of the animation in animation registry
+ * @param {animatejs.Animation} animation
+ * @return {number}
+ * @private
+ */
+animatejs.Scene.prototype.indexOf_ = function(animation) {
+  'use strict';
+  var i = this.sceneAnimations_.length;
+  while (i--) {
+    if (this.sceneAnimations_[i]['animation'] === animation) {
+      return i;
+    }
+  }
+  return -1;
+};
+
+
+/**
+ * Function returns true if provided animation exists in
+ * scene's registry
+ * @param {animatejs.Animation} animation
+ * @return {boolean}
+ * @export
+ */
+animatejs.Scene.prototype.has = function(animation) {
+  'use strict';
+  return this.indexOf_(animation) !== -1;
+};
+
+
+/**
  *
  * @param {number} at
  * @param {animatejs.Animation} animation
@@ -46,11 +78,35 @@ goog.inherits(animatejs.Scene, animatejs.util.Playable);
  */
 animatejs.Scene.prototype.add = function(at, animation) {
   'use strict';
-  animation.setFrameRequester(this);
-  this.sceneAnimations_.push({
-    at: at,
-    animation: animation
-  });
+  var parentScene;
+
+  if (!goog.isNumber(at)) {
+    throw new TypeError('number');
+  }
+
+  if (!animatejs.util.instanceOf(animation, animatejs.Animation)) {
+    throw new TypeError('animation required');
+  }
+
+  if (this.has(animation)) {
+    throw new Error('cannot add same animation twice');
+  } else {
+    //if animation is already a member of other scene remove it from there
+    parentScene = animation.getParentScene();
+    if (parentScene && parentScene !== this) {
+      parentScene.remove(animation);
+    }
+
+    animation.setParentScene(this);
+    animation.setFrameRequester(this);
+    animation.addOnDisposeCallback(function() {
+      this.remove(animation);
+    }, this);
+    this.sceneAnimations_.push({
+      'at': at,
+      'animation': animation
+    });
+  }
 };
 
 
@@ -61,18 +117,14 @@ animatejs.Scene.prototype.add = function(at, animation) {
  */
 animatejs.Scene.prototype.remove = function(animation) {
   'use strict';
-  var i = this.sceneAnimations_.length,
-      entryAnimation;
-  while (i--) {
-    entryAnimation = this.sceneAnimations_[i].animation;
-    if (entryAnimation === animation) {
-      if (entryAnimation.isRunning()) {
-        entryAnimation.stop();
-      }
-      entryAnimation.setFrameRequester(animatejs.util);
-      this.sceneAnimations_.splice(i, 1);
-      return;
+  var i = this.indexOf_(animation);
+  if (i !== -1) {
+    if (animation.isRunning()) {
+      animation.stop();
     }
+    animation.setParentScene(null);
+    animation.setFrameRequester(animatejs.util);
+    this.sceneAnimations_.splice(i, 1);
   }
 };
 
@@ -84,7 +136,7 @@ animatejs.Scene.prototype.remove = function(animation) {
  */
 animatejs.Scene.prototype.getAnimationEntries = function() {
   'use strict';
-  return this.sceneAniations_;
+  return this.sceneAnimations_;
 };
 
 
@@ -122,5 +174,16 @@ animatejs.Scene.prototype.play = function(opt_at) {
   'use strict';
   animatejs.Scene.superClass_.play.call(this, opt_at);
 };
+
+
+/**
+ * @typedef {{
+ *    at: (number),
+ *    animation: (animatejs.Animation)
+ * }}
+ * @name animatejs.Scene.AnimationEntry
+ */
+animatejs.Scene.AnimationEntry; // jshint ignore:line
+
 
 
