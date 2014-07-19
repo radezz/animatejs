@@ -2,7 +2,6 @@ goog.provide('animatejs.Scene');
 
 goog.require('animatejs.Animation');
 goog.require('animatejs.util');
-goog.require('animatejs.util.IRequestAnimationFrame');
 goog.require('animatejs.util.Playable');
 
 
@@ -11,7 +10,6 @@ goog.require('animatejs.util.Playable');
  * Scene
  * @constructor
  * @extends {animatejs.util.Playable}
- * @implements {aniamtejs.util.IRequestAnimationFrame}
  * @export
  */
 animatejs.Scene = function() {
@@ -33,10 +31,17 @@ animatejs.Scene = function() {
    */
   this.browserFrameHandle_ = null;
 
-  this.requestAnimationFrame = goog.bind(this.requestAnimationFrame, this);
-  this.cancelAnimationFrame = goog.bind(this.cancelAnimationFrame, this);
 };
 goog.inherits(animatejs.Scene, animatejs.util.Playable);
+
+
+/**
+ * @typedef
+ */
+animatejs.Scene.DUMMY_FRAME_REQUEST = {
+  'requestAnimationFrame': goog.nullFunction,
+  'cancelAnimationFrame': goog.nullFunction
+};
 
 
 /**
@@ -98,12 +103,14 @@ animatejs.Scene.prototype.add = function(at, animation) {
     }
 
     animation.setParentScene(this);
-    animation.setFrameRequester(this);
+    animation.setFrameRequester(animatejs.Scene.DUMMY_FRAME_REQUEST);
     animation.addOnDisposeCallback(function() {
       this.remove(animation);
     }, this);
+
     this.sceneAnimations_.push({
       'at': at,
+      'end': animation.isLooping() ? Number.POSITIVE_INFINITY : at + animation.getDuration(),
       'animation': animation
     });
   }
@@ -141,31 +148,6 @@ animatejs.Scene.prototype.getAnimationEntries = function() {
 
 
 /**
- * Function requests animation frame from scene
- * @param {Function} onFrame
- * @return {number}
- * @protected
- */
-animatejs.Scene.prototype.requestAnimationFrame = function(onFrame) {
-  'use strict';
-  return this.frameHandlers_.push(onFrame);
-};
-
-
-/**
- * Function cancels given frameHandler
- * @param {number} frameHandler
- * @protected
- */
-animatejs.Scene.prototype.cancelAnimationFrame = function(frameHandler) {
-  'use strict';
-  if (this.frameHandlers_[frameHandler]) {
-    this.frameHandlers_.splice(frameHandler, 1);
-  }
-};
-
-
-/**
  * Function starts playing scene animations
  * @param {number=} opt_at
  * @export
@@ -177,8 +159,55 @@ animatejs.Scene.prototype.play = function(opt_at) {
 
 
 /**
+ * Function sets scene at provided time
+ * @param {number} sceneTime
+ * @export
+ */
+animatejs.Scene.prototype.set = function(sceneTime) {
+  'use strict';
+  var animationEntry,
+      animationTime,
+      animation,
+      i,
+      l;
+
+  this.atTime = sceneTime;
+  for (i = 0, l = this.sceneAnimations_.length; i < l; i++) {
+    animationEntry = this.sceneAnimations_[i];
+    if (sceneTime >= animationEntry['at']) {
+      animation = animationEntry['animation'];
+      if (animation.isLooping()) {
+        animationTime = (sceneTime - animationEntry['at']) % animation.getDuration();
+      } else {
+        animationTime = sceneTime - animationEntry['at'];
+      }
+
+      if (animation.isRunning()) {
+        animation.set(animationTime);
+      } else if (sceneTime < animationEntry['end']) {
+        animation.play(animationTime);
+      }
+    }
+  }
+
+};
+
+
+/**
+ * Function stops entire scene (all animations)
+ * @return {animatejs.Scene}
+ * @export
+ */
+animatejs.Scene.prototype.stop = function() {
+  'use strict';
+  return this;
+};
+
+
+/**
  * @typedef {{
  *    at: (number),
+ *    end: (number),
  *    animation: (animatejs.Animation)
  * }}
  * @name animatejs.Scene.AnimationEntry

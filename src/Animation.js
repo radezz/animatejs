@@ -170,6 +170,17 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
 
 
 /**
+ * Function returns duration of the animation
+ * @return {number}
+ * @export
+ */
+animatejs.Animation.prototype.getDuration = function() {
+  'use strict';
+  return this['keyFrames'].getHead()['at'];
+};
+
+
+/**
  * Function destroys this obejcts. After calling destroy object
  * will not be usable but will be safetly disposed. This will stop
  * the animation and cleanup all attached listeners and keyframes.

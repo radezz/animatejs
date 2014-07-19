@@ -17,6 +17,8 @@ describe('aniamtejs.Scene', function() {
     animatejs.Animation.prototype.isRunning = function() {};
     animatejs.Animation.prototype.setParentScene = function() {};
     animatejs.Animation.prototype.getParentScene = function() {};
+    animatejs.Animation.prototype.getDuration = function() {};
+    animatejs.Animation.prototype.isLooping = function() {};
 
     animationMock = new animatejs.Animation();
     scene = new animatejs.Scene();
@@ -38,12 +40,6 @@ describe('aniamtejs.Scene', function() {
     it('adds animation to scene', function() {
       scene.add(20, animationMock);
       expect(scene.getAnimationEntries().length).toBe(1);
-    });
-
-    it('sets frame requester to scene', function() {
-      spyOn(animationMock, 'setFrameRequester');
-      scene.add(20, animationMock);
-      expect(animationMock.setFrameRequester).toHaveBeenCalledWith(scene);
     });
 
     it('throws exception if aniamtion is added for second time', function() {

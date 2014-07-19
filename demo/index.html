@@ -24,20 +24,36 @@
                 width: 10px;
             }
 
+            #animateDiv2 {
+                position: absolute;
+                left: 0px;
+                top: 300px;
+                background-color: red;
+                height: 200px;
+                width: 10px;
+            }
+
         </style>
     </head>
     <body>
         <div style="position: relative; width: 100%; height: 200px;">
             <div id="animateDiv"></div>
+            <div id="animateDiv2"></div>
         </div>
         <script>
 
             var elem = document.getElementById('animateDiv'),
+                elem2 = document.getElementById('animateDiv2'),
                 anim = new animatejs.Animation({
                     "width": 10,
                     "height": 200,
                     "left": 0,
                     "top": 0
+                }),
+                anim2 = new animatejs.Animation({
+                    "left": 0,
+                    "top": 0,
+                    "width": 10
                 });
 
             anim.keyFrame(400, {
@@ -69,10 +85,34 @@
                 console.log('start');
             }).on('finish', function() {
                 console.log('finish');
-            }).play(200);
+            }).loop();
+
+            anim2.keyFrame(4000, {
+               'width': 30,
+               'left': 500,
+               'top': 0
+            }).on('frame', function(values, changedProperties, frame) {
+                var matrix = 'matrix(1, 0, 0, 1, ' + Math.round(values.left) + ', ' + Math.round(values.top) + ')';
+
+                elem2.style.webkitTransform = matrix;
+                elem2.style.mozTransform = matrix;
+                elem2.style.transform = matrix;
+                if (changedProperties.indexOf('width') !== -1) {
+                    elem2.style.width = values.width + 'px';
+                }
+
+                if (changedProperties.indexOf('height') !== -1) {
+                    elem2.style.height = values.height + 'px';
+                }
+            });
+
+            var scene = new animatejs.Scene();
+            scene.add(500 ,anim);
+            scene.add(600, anim2);
 
             window.addEventListener('click', function() {
-                anim.play();
+                //anim.play();
+                scene.play();
             });
 
         </script>
