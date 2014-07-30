@@ -31,6 +31,11 @@ animatejs.Scene = function() {
    */
   this.browserFrameHandle_ = null;
 
+  /**
+   * @private
+   */
+  this.duration_ = null;
+
 };
 goog.inherits(animatejs.Scene, animatejs.util.Playable);
 
@@ -83,7 +88,8 @@ animatejs.Scene.prototype.has = function(animation) {
  */
 animatejs.Scene.prototype.add = function(at, animation) {
   'use strict';
-  var parentScene;
+  var parentScene,
+      endTime;
 
   if (!goog.isNumber(at)) {
     throw new TypeError('number');
@@ -108,9 +114,14 @@ animatejs.Scene.prototype.add = function(at, animation) {
       this.remove(animation);
     }, this);
 
+    endTime = at + animation.getDuration();
+    if (endTime > this.duration_) {
+      this.duration_ = endTime;
+    }
+
     this.sceneAnimations_.push({
       'at': at,
-      'end': animation.isLooping() ? Number.POSITIVE_INFINITY : at + animation.getDuration(),
+      'end': animation.isLooping() ? Number.POSITIVE_INFINITY : endTime,
       'animation': animation
     });
   }
@@ -168,10 +179,12 @@ animatejs.Scene.prototype.set = function(sceneTime) {
   var animationEntry,
       animationTime,
       animation,
+      isLastFrame,
       i,
       l;
 
-  this.atTime = sceneTime;
+  isLastFrame = sceneTime >= this.duration_;
+  this.atTime = isLastFrame ? this.duration_ : sceneTime;
   for (i = 0, l = this.sceneAnimations_.length; i < l; i++) {
     animationEntry = this.sceneAnimations_[i];
     if (sceneTime >= animationEntry['at']) {
@@ -190,6 +203,10 @@ animatejs.Scene.prototype.set = function(sceneTime) {
     }
   }
 
+  if (isLastFrame) {
+    this.stop();
+  }
+
 };
 
 
@@ -200,7 +217,27 @@ animatejs.Scene.prototype.set = function(sceneTime) {
  */
 animatejs.Scene.prototype.stop = function() {
   'use strict';
+  var i = this.sceneAnimations_.length,
+      animation;
+  while (i--) {
+    animation = this.sceneAnimations_[i]['animation'];
+    if (animation.isRunning()) {
+      animation.stop();
+    }
+  }
+  animatejs.Scene.superClass_.stop.call(this);
   return this;
+};
+
+
+/**
+ * Function returns duration of the entire scene
+ * @return {number}
+ * @export
+ */
+animatejs.Scene.prototype.getDuration = function() {
+  'use strict';
+  return this.duration_;
 };
 
 
