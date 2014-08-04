@@ -111,7 +111,9 @@ animatejs.Scene.prototype.add = function(at, animation) {
     animation.setParentScene(this);
     animation.setFrameRequester(animatejs.Scene.DUMMY_FRAME_REQUEST);
     animation.addOnDisposeCallback(function() {
-      this.remove(animation);
+      if (this.has(animation)) {
+        this.remove(animation);
+      }
     }, this);
 
     endTime = at + animation.getDuration();
@@ -231,6 +233,24 @@ animatejs.Scene.prototype.stop = function() {
 
 
 /**
+ * Function pauses animations in current scene
+ * @export
+ */
+animatejs.Scene.prototype.pause = function() {
+  'use strict';
+  var i = this.sceneAnimations_.length,
+      animation;
+  while (i--) {
+    animation = this.sceneAnimations_[i]['animation'];
+    if (animation.isRunning()) {
+      animation.pause();
+    }
+  }
+  animatejs.Scene.superClass_.pause.call(this);
+};
+
+
+/**
  * Function returns duration of the entire scene
  * @return {number}
  * @export
@@ -238,6 +258,31 @@ animatejs.Scene.prototype.stop = function() {
 animatejs.Scene.prototype.getDuration = function() {
   'use strict';
   return this.duration_;
+};
+
+
+/**
+ * Function releases objects references
+ * @protected
+ */
+animatejs.Scene.prototype.disposeInternal = function() {
+  'use strict';
+  animatejs.Scene.superClass_.disposeInternal.call(this);
+  var i = this.sceneAnimations_.length;
+  while (i--) {
+    this.remove(this.sceneAnimations_[i]['animation']);
+  }
+};
+
+
+/**
+ * Function destroys the objects and clears
+ * all animation entries
+ * @export
+ */
+animatejs.Scene.prototype.destroy = function() {
+  'use strict';
+  goog.dispose(this);
 };
 
 
