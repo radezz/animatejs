@@ -218,11 +218,16 @@ animatejs.Scene.prototype.set = function(sceneTime) {
 animatejs.Scene.prototype.stop = function() {
   'use strict';
   var i = this.sceneAnimations_.length,
+      animationEntry,
       animation;
   while (i--) {
-    animation = this.sceneAnimations_[i]['animation'];
+    animationEntry = this.sceneAnimations_[i];
+    animation = animationEntry['animation'];
     if (animation.isRunning()) {
       animation.stop();
+      if (animationEntry['end'] === Number.POSITIVE_INFINITY) {
+        animation.loop();
+      }
     }
   }
   animatejs.Scene.superClass_.stop.call(this);
