@@ -262,3 +262,14 @@ animatejs.util.Playable.prototype.onFrame_ = function() {
   }
 };
 
+
+/**
+ * Function disposes the object
+ * @protected
+ */
+animatejs.util.Playable.prototype.disposeInternal = function() {
+  'use strict';
+  this.stop();
+  animatejs.util.Playable.superClass_.disposeInternal.call(this);
+};
+

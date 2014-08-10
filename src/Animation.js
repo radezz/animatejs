@@ -198,7 +198,6 @@ animatejs.Animation.prototype.destroy = function() {
  */
 animatejs.Animation.prototype.disposeInternal = function() {
   'use strict';
-  this.stop();
   this['keyFrames'].destroy();
   animatejs.Animation.superClass_.disposeInternal.call(this);
 };
