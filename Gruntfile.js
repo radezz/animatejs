@@ -52,11 +52,11 @@ module.exports = function(grunt) {
     },
     jasmine: {
       options: {
-        vendor: ['<%= path.closure %>/closure/goog/base.js', '<%= path.tmp %>/dependencies.js'],
         specs: '<%= path.src %>/**/*_spec.js'
       },
       test: {
         options: {
+          vendor: ['<%= path.closure %>/closure/goog/base.js', '<%= path.tmp %>/dependencies.js'],
           outfile: '<%= path.tmp %>/unittests/SpecRunner.html',
           junit: {
             path: '<%= path.tmp %>/unittests/',
@@ -64,11 +64,38 @@ module.exports = function(grunt) {
           },
           keepRunner: true
         }
+      },
+      coverage: {
+        options: {
+          vendor: ['<%= path.closure %>/closure/goog/base.js', '<%= path.tmp %>/depscoverage.js'],
+          template: require('grunt-template-jasmine-istanbul'),
+          templateOptions: {
+            coverage: '<%= path.tmp %>/coverage/coverage.json',
+            report: [{
+              type: 'cobertura',
+              options: {
+                dir: '<%= path.tmp %>/coverage/'
+              }
+            },
+            {
+              type: 'html',
+              options: {
+                dir: '<%= path.tmp %>/coverage/'
+              }
+            }]
+          }
+        }
+      }
+    },
+    instrument: {
+      files: ['<%= path.src %>/**/*.js', '!<%= path.src %>/**/*_spec.js'],
+      options: {
+        basePath: '.grunt/grunt-contrib-jasmine/'
       }
     },
     watch: {
       scripts: {
-        files: ['src/**/*.js'],
+        files: ['<%= path.src %>/**/*.js'],
         tasks: ['lint', 'test'],
         options: {
           spawn: false
@@ -91,6 +118,12 @@ module.exports = function(grunt) {
       },
       deps: {
         dest: '<%= path.tmp %>/dependencies.js'
+      },
+      depsCoverage: {
+        options: {
+          root_with_prefix: '"src ../../../../.grunt/grunt-contrib-jasmine/src/"'
+        },
+        dest: '<%= path.tmp %>/depscoverage.js'
       }
     },
     closureBuilder: {
@@ -122,6 +155,7 @@ module.exports = function(grunt) {
   grunt.registerTask('deps', ['closureDepsWriter']);
   grunt.registerTask('http', ['connect:serve']);
   grunt.registerTask('test', ['deps', 'jasmine:test']);
+  grunt.registerTask('coverage', ['instrument', 'closureDepsWriter:depsCoverage', 'jasmine:coverage']);
   grunt.registerTask('build', ['lint', 'deps', 'jasmine:test', 'closureBuilder:build']);
 
 
@@ -133,6 +167,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-istanbul');
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-combine');
 

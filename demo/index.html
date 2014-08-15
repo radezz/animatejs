@@ -115,6 +115,55 @@
                 scene.play();
             });
 
+        animatejs.createAnimation({
+            frames: {
+                'start': {
+                    width: 100,
+                    height: 200,
+                },
+                '10%': {
+                    width: 300,
+                    height: 400,
+                    _ease: 7
+                },
+                '30%': {
+                    widht: 500,
+                    height: 600
+                },
+                '100%': {
+                    width: 1,
+                    height: 1
+                }
+            },
+            onFrame: function() {
+
+            }
+        });
+        animatejs.createAnimation({
+            frames: [
+                {
+                    at: '10%',
+                    values: {
+                        width: 10,
+                        height: 10
+                    },
+                    ease: easinquad
+                },
+                {
+                    at: '40%',
+                    values: {
+                        width: 10,
+                        height: 10
+                    },
+                    ease: easinquad
+                }
+            ],
+            duration: 1000,
+            onFrame: function() {
+
+            }
+        });
+
         </script>
     </body>
 </html>

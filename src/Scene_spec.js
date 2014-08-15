@@ -14,11 +14,23 @@ describe('aniamtejs.Scene', function() {
     animatejs.Animation.prototype.setFrameRequester = function() {};
     animatejs.Animation.prototype.addOnDisposeCallback = function() {};
     animatejs.Animation.prototype.stop = function() {};
-    animatejs.Animation.prototype.isRunning = function() {};
-    animatejs.Animation.prototype.setParentScene = function() {};
-    animatejs.Animation.prototype.getParentScene = function() {};
-    animatejs.Animation.prototype.getDuration = function() {};
-    animatejs.Animation.prototype.isLooping = function() {};
+    animatejs.Animation.prototype.set = function() {};
+    animatejs.Animation.prototype.play = function() {};
+    animatejs.Animation.prototype.isRunning = function() {
+      return false;
+    };
+    animatejs.Animation.prototype.setParentScene = function() {
+      return null;
+    };
+    animatejs.Animation.prototype.getParentScene = function() {
+      return null;
+    };
+    animatejs.Animation.prototype.getDuration = function() {
+      return 100;
+    };
+    animatejs.Animation.prototype.isLooping = function() {
+      return false;
+    };
 
     animationMock = new animatejs.Animation();
     scene = new animatejs.Scene();
@@ -61,6 +73,27 @@ describe('aniamtejs.Scene', function() {
       }).toThrow();
     });
 
+    it('removes animation from previous scene', function() {
+      var scene1 = new animatejs.Scene();
+      animationMock.getParentScene = function() {
+        return scene1;
+      };
+      spyOn(scene1, 'remove');
+      scene.add(10, animationMock);
+      expect(scene1.remove).toHaveBeenCalledWith(animationMock);
+    });
+
+    it('adds on dispose callback which removes animation if disposed', function() {
+      var onDisposeClb;
+      animationMock.addOnDisposeCallback = function(clb) {
+        onDisposeClb = clb;
+      };
+      spyOn(scene, 'remove');
+      scene.add(10, animationMock);
+      onDisposeClb();
+      expect(scene.remove).toHaveBeenCalledWith(animationMock);
+    });
+
   });
 
   describe('remove', function() {
@@ -93,6 +126,57 @@ describe('aniamtejs.Scene', function() {
       scene.remove(anim1);
       expect(anim1.setFrameRequester).toHaveBeenCalledWith(animatejs.util);
     });
+  });
+
+  describe('set', function() {
+    var anim1,
+        anim2;
+    beforeEach(function() {
+      anim1 = new animatejs.Animation();
+      anim2 = new animatejs.Animation();
+      anim1.getDuration = anim2.getDuration = function() {
+        return 100;
+      };
+      anim1.isRunning = anim2.isRunning = function() {
+        return true;
+      };
+      spyOn(anim1, 'set');
+      spyOn(anim2, 'set');
+    });
+
+    it('should start animations if not running', function() {
+      scene.add(10, anim1);
+      scene.add(30, anim2);
+      spyOn(anim1, 'play');
+      spyOn(anim2, 'play');
+      anim1.isRunning = anim2.isRunning = function() {
+        return false;
+      };
+      scene.set(35);
+      expect(anim1.play).toHaveBeenCalledWith(25);
+      expect(anim2.play).toHaveBeenCalledWith(5);
+    });
+
+    it('set all animations to proper time', function() {
+      scene.add(10, anim1);
+      scene.add(30, anim2);
+      scene.set(35);
+      expect(anim1.set).toHaveBeenCalledWith(25);
+      expect(anim2.set).toHaveBeenCalledWith(5);
+    });
+
+    it('should set looping animations properly', function() {
+      anim1.getDuration = function() {
+        return 10;
+      };
+      anim1.isLooping = function() {
+        return true;
+      };
+      scene.add(10, anim1);
+      scene.add(30, anim2);
+
+    });
+
   });
 
   describe('has', function() {

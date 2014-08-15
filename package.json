@@ -12,6 +12,8 @@
     "grunt-contrib-connect": "~0.7.1",
     "grunt-jsdoc": "0.4.0",
     "grunt-combine": "0.8.3",
+    "grunt-istanbul": "0.3.0",
+    "grunt-template-jasmine-istanbul": "~0.3.1",
     "closure-compiler": "~0.2.6",
     "grunt-closure-tools": "~0.9.6",
     "closure-linter-wrapper": "~0.2.9",

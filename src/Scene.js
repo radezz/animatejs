@@ -34,7 +34,7 @@ animatejs.Scene = function() {
   /**
    * @private
    */
-  this.duration_ = null;
+  this.duration_ = 0;
 
 };
 goog.inherits(animatejs.Scene, animatejs.util.Playable);
@@ -88,7 +88,8 @@ animatejs.Scene.prototype.has = function(animation) {
  */
 animatejs.Scene.prototype.add = function(at, animation) {
   'use strict';
-  var parentScene,
+  var that = this,
+      parentScene,
       endTime;
 
   if (!goog.isNumber(at)) {
@@ -111,10 +112,10 @@ animatejs.Scene.prototype.add = function(at, animation) {
     animation.setParentScene(this);
     animation.setFrameRequester(animatejs.Scene.DUMMY_FRAME_REQUEST);
     animation.addOnDisposeCallback(function() {
-      if (this.has(animation)) {
-        this.remove(animation);
+      if (that.has(animation)) {
+        that.remove(animation);
       }
-    }, this);
+    });
 
     endTime = at + animation.getDuration();
     if (endTime > this.duration_) {
@@ -157,17 +158,6 @@ animatejs.Scene.prototype.remove = function(animation) {
 animatejs.Scene.prototype.getAnimationEntries = function() {
   'use strict';
   return this.sceneAnimations_;
-};
-
-
-/**
- * Function starts playing scene animations
- * @param {number=} opt_at
- * @export
- */
-animatejs.Scene.prototype.play = function(opt_at) {
-  'use strict';
-  animatejs.Scene.superClass_.play.call(this, opt_at);
 };
 
 
