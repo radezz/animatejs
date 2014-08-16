@@ -75,6 +75,24 @@ describe('animatejs.KeyFrameList', function() {
       expect(list[1]).toBe(fr3);
       expect(list[2]).toBe(fr2);
     });
+
+    it('replaces key frame if at time is the same', function() {
+      var kframes = new animatejs.KeyFrameList({
+        'prop': 0
+      }),
+          fr2 = new animatejs.KeyFrame(15, {
+            'prop': 5
+          }),
+          fr3 = new animatejs.KeyFrame(15, {
+            'prop': 15
+          }),
+          list;
+
+      kframes.add(fr2);
+      kframes.add(fr3);
+      list = kframes.getArray();
+      expect(list[1]).toBe(fr3);
+    });
   });
 
   describe('dispose', function() {

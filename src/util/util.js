@@ -14,6 +14,18 @@ animatejs.util.instanceOf = function(obj, ofType) {
 
 
 /**
+ * Helper alias for typeof
+ * @param {*} arg
+ * @return {boolean}
+ */
+animatejs.util.typeofObject = function(arg) {
+  'use strict';
+  return typeof(arg) === 'object';
+};
+
+
+
+/**
  * Function returns current timestamp
  * @return {number}
  */

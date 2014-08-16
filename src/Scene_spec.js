@@ -17,6 +17,7 @@ describe('aniamtejs.Scene', function() {
     animatejs.Animation.prototype.set = function() {};
     animatejs.Animation.prototype.play = function() {};
     animatejs.Animation.prototype.pause = function() {};
+    animatejs.Animation.prototype.loop = function() {};
     animatejs.Animation.prototype.isRunning = function() {
       return false;
     };
@@ -95,6 +96,15 @@ describe('aniamtejs.Scene', function() {
       expect(scene.remove).toHaveBeenCalledWith(animationMock);
     });
 
+    it('sets end time to infinity for entry if looping', function() {
+      var entries;
+      animationMock.isLooping = function() {
+        return true;
+      };
+      scene.add(10, animationMock);
+      entries = scene.getAnimationEntries();
+      expect(entries[0].end).toBe(Number.POSITIVE_INFINITY);
+    });
   });
 
   describe('remove', function() {
@@ -199,6 +209,9 @@ describe('aniamtejs.Scene', function() {
       anim1.isRunning = anim2.isRunning = function() {
         return true;
       };
+      anim1.isLooping = function() {
+        return true;
+      };
       scene.add(10, anim1);
       scene.add(30, anim2);
     });
@@ -206,10 +219,14 @@ describe('aniamtejs.Scene', function() {
     it('stops all running animations', function() {
       spyOn(anim1, 'stop');
       spyOn(anim2, 'stop');
+      spyOn(anim1, 'loop');
       scene.stop();
       expect(anim1.stop).toHaveBeenCalled();
       expect(anim2.stop).toHaveBeenCalled();
+      //should set back the looping after stop
+      expect(anim1.loop).toHaveBeenCalled();
     });
+
   });
 
   describe('pause', function() {

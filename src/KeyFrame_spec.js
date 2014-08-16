@@ -33,13 +33,35 @@ describe('animatejs.KeyFrame', function() {
 
     it('throws exception if ease is specified but not a function', function() {
       expect(function() {
-        new animatejs.KeyFram(1, { 'prop': 1 }, {});
-      });
+        new animatejs.KeyFrame(1, { 'prop': 1 }, {});
+      }).toThrow();
 
       expect(function() {
         new animatejs.KeyFrame(1, { 'prop': 1 }, function() {});
       }).not.toThrow();
 
+    });
+  });
+
+  describe('validateProperties', function() {
+    it('throes exception if no properties specified', function() {
+      expect(function() {
+        new animatejs.KeyFrame(1, {});
+      }).toThrow();
+    });
+
+    it('throws exception if properties param is not object', function() {
+      expect(function() {
+        new animatejs.KeyFrame(1, 1);
+      }).toThrow();
+
+      expect(function() {
+        new animatejs.KeyFrame(1, '1');
+      }).toThrow();
+
+      expect(function() {
+        new animatejs.KeyFrame(1, function() {});
+      }).toThrow();
     });
   });
 });

@@ -184,6 +184,7 @@ animatejs.util.LinkedList.prototype.disposeInternal = function() {
     this.unlink(element);
     element = this.head_;
   }
+  animatejs.util.LinkedList.superClass_.disposeInternal.call(this);
 };
 
 

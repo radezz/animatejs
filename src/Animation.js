@@ -60,7 +60,7 @@ goog.inherits(animatejs.Animation, animatejs.util.Playable);
  */
 animatejs.Animation.prototype.keyFrame = function(at, properties, opt_ease) {
   'use strict';
-  var keyFrame = new animatejs.KeyFrame(at, properties, opt_ease);
+  var keyFrame = new animatejs.KeyFrame(at, goog.object.clone(properties), opt_ease);
   this['keyFrames'].add(keyFrame);
   return this;
 };
@@ -70,6 +70,7 @@ animatejs.Animation.prototype.keyFrame = function(at, properties, opt_ease) {
  * function plays current animation
  * @export
  * @param {number=} opt_at optional start time
+ *
  * @return {animatejs.Animation}
  */
 animatejs.Animation.prototype.play = function(opt_at) {

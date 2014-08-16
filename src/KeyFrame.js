@@ -55,7 +55,7 @@ animatejs.KeyFrame.validateProperties = function(properties) {
   var key,
       hasProperties = false;
 
-  if (!goog.isObject(properties)) {
+  if (!animatejs.util.typeofObject(properties)) {
     throw new TypeError();
   }
 

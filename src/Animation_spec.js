@@ -34,11 +34,11 @@ describe('animatejs.Animation', function() {
     it('adds new key frame to the animation', function() {
       animation.keyFrame(10, {
         'prop': 10
-      }, animatejs.ease.EASEINQUAD);
+      }, animatejs.ease.easeinquad);
       var keyFrame = animation.keyFrames.getArray()[1];
       expect(keyFrame instanceof animatejs.KeyFrame).toBe(true);
       expect(keyFrame.at).toBe(10);
-      expect(keyFrame.ease).toBe(animatejs.ease.EASEINQUAD);
+      expect(keyFrame.ease).toBe(animatejs.ease.easeinquad);
     });
   });
 
@@ -67,7 +67,7 @@ describe('animatejs.Animation', function() {
 
       animation.keyFrame(100, {
         'prop': 10
-      });
+      }, animatejs.ease.easeinquad);
 
       animation.on('start', startSpy);
       animation.on('frame', frameSpy);
@@ -198,6 +198,26 @@ describe('animatejs.Animation', function() {
     });
   });
 
+  describe('getDuration', function() {
+    it('returns duration of the animation', function() {
+      animation.keyFrame(10, {
+        'prop': 10
+      });
+      animation.keyFrame(60, {
+        'prop': 10
+      });
+      expect(animation.getDuration()).toBe(60);
+    });
+  });
+
+  describe('set/get ParentScene', function() {
+    it('sets parent scene', function() {
+      var sceneMock = {};
+      animation.setParentScene(sceneMock);
+      expect(animation.getParentScene()).toBe(sceneMock);
+    });
+  });
+
   describe('destroy', function() {
     it('stops animation and destroys references', function() {
       spyOn(animation.keyFrames, 'destroy').and.callThrough();
@@ -208,6 +228,15 @@ describe('animatejs.Animation', function() {
       animation.destroy();
       expect(animation.isRunning()).toBe(false);
       expect(animation.keyFrames.destroy).toHaveBeenCalled();
+    });
+
+    it('destroys animation if keyframe list is destroyed', function() {
+      animation.keyFrame(10, {
+        'prop': 10
+      });
+      spyOn(animation, 'destroy');
+      animation.keyFrames.destroy();
+      expect(animation.destroy).toHaveBeenCalled();
     });
   });
 

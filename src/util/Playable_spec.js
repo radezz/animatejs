@@ -84,6 +84,24 @@ describe('animatejs.util.Playable', function() {
       expect(playable.getState()).toBe(animatejs.util.Playable.State.IDLE);
     });
   });
+
+  describe('setFrameRequester', function() {
+    it('sets new frame requester which is used for fetching frames', function() {
+      var requester = {
+        requestAnimationFrame: function() {
+          return 1;
+        },
+        cancelAnimationFrame: function() {}
+      };
+      spyOn(requester, 'requestAnimationFrame').and.callThrough();
+      spyOn(requester, 'cancelAnimationFrame');
+      playable.setFrameRequester(requester);
+      playable.play();
+      playable.stop();
+      expect(requester.requestAnimationFrame).toHaveBeenCalled();
+      expect(requester.cancelAnimationFrame).toHaveBeenCalled();
+    });
+  });
 });
 
 
