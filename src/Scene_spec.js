@@ -16,6 +16,7 @@ describe('aniamtejs.Scene', function() {
     animatejs.Animation.prototype.stop = function() {};
     animatejs.Animation.prototype.set = function() {};
     animatejs.Animation.prototype.play = function() {};
+    animatejs.Animation.prototype.pause = function() {};
     animatejs.Animation.prototype.isRunning = function() {
       return false;
     };
@@ -174,9 +175,86 @@ describe('aniamtejs.Scene', function() {
       };
       scene.add(10, anim1);
       scene.add(30, anim2);
-
+      scene.set(37);
+      expect(anim1.set).toHaveBeenCalledWith(7);
     });
 
+    it('should stop entire scene if value greater than duration', function() {
+      spyOn(scene, 'stop');
+      scene.set(400);
+      expect(scene.stop).toHaveBeenCalled();
+    });
+
+  });
+
+  describe('stop', function() {
+    var anim1,
+        anim2;
+    beforeEach(function() {
+      anim1 = new animatejs.Animation();
+      anim2 = new animatejs.Animation();
+      anim1.getDuration = anim2.getDuration = function() {
+        return 100;
+      };
+      anim1.isRunning = anim2.isRunning = function() {
+        return true;
+      };
+      scene.add(10, anim1);
+      scene.add(30, anim2);
+    });
+
+    it('stops all running animations', function() {
+      spyOn(anim1, 'stop');
+      spyOn(anim2, 'stop');
+      scene.stop();
+      expect(anim1.stop).toHaveBeenCalled();
+      expect(anim2.stop).toHaveBeenCalled();
+    });
+  });
+
+  describe('pause', function() {
+    var anim1,
+        anim2;
+    beforeEach(function() {
+      anim1 = new animatejs.Animation();
+      anim2 = new animatejs.Animation();
+      anim1.getDuration = anim2.getDuration = function() {
+        return 100;
+      };
+      anim1.isRunning = anim2.isRunning = function() {
+        return true;
+      };
+      scene.add(10, anim1);
+      scene.add(30, anim2);
+    });
+
+    it('pauses all running animations', function() {
+      spyOn(anim1, 'pause');
+      spyOn(anim2, 'pause');
+      scene.pause();
+      expect(anim1.pause).toHaveBeenCalled();
+      expect(anim2.pause).toHaveBeenCalled();
+    });
+  });
+
+  describe('destroy', function() {
+    var anim1,
+        anim2;
+
+    beforeEach(function() {
+      anim1 = new animatejs.Animation();
+      anim2 = new animatejs.Animation();
+      anim1.getDuration = anim2.getDuration = function() {
+        return 100;
+      };
+      scene.add(10, anim1);
+      scene.add(30, anim2);
+    });
+
+    it('removes all animations from the registry', function() {
+      scene.destroy();
+      expect(scene.getAnimationEntries().length).toBe(0);
+    });
   });
 
   describe('has', function() {
@@ -186,4 +264,20 @@ describe('aniamtejs.Scene', function() {
       expect(scene.has(anim)).toBe(true);
     });
   });
+
+  describe('getDuration', function() {
+    it('returns duration of entire scene', function() {
+      var anim1,
+          anim2;
+      anim1 = new animatejs.Animation();
+      anim2 = new animatejs.Animation();
+      anim1.getDuration = anim2.getDuration = function() {
+        return 100;
+      };
+      scene.add(10, anim1);
+      scene.add(30, anim2);
+      expect(scene.getDuration()).toBe(130);
+    });
+  });
+
 });
