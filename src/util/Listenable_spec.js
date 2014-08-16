@@ -25,6 +25,34 @@ describe('animatejs.util.Listenable', function() {
   });
 
   describe('on', function() {
+    it('throws exception if message name is not a string', function() {
+      expect(function() {
+        listenable.on(1, function() {});
+      }).toThrow();
+
+      expect(function() {
+        listenable.on({}, function() {});
+      }).toThrow();
+
+      expect(function() {
+        listenable.on(function() {}, function() {});
+      }).toThrow();
+    });
+
+    it('throws exception if listener is not a function', function() {
+      expect(function() {
+        listenable.on('message', {});
+      }).toThrow();
+
+      expect(function() {
+        listenable.on('message', 1);
+      }).toThrow();
+
+      expect(function() {
+        listenable.on('message', null);
+      }).toThrow();
+    });
+
     it('registeres listener to provided message', function() {
       var spy = jasmine.createSpy('message'),
           messageObj = {};

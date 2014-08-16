@@ -88,7 +88,10 @@ module.exports = function(grunt) {
       }
     },
     instrument: {
-      files: ['<%= path.src %>/**/*.js', '!<%= path.src %>/**/*_spec.js'],
+      files: [
+        '<%= path.src %>/**/*.js',
+        '!<%= path.src %>/**/*_spec.js',
+        '!<%= path.src %>/**/IRequestAnimationFrame.js'],
       options: {
         basePath: '.grunt/grunt-contrib-jasmine/'
       }

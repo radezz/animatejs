@@ -52,6 +52,19 @@ describe('animatejs.util.LinkedList', function() {
   });
 
   describe('link', function() {
+
+    it('throws exception if element is not LLElement', function() {
+      expect(function() {
+        ll.link({});
+      }).toThrow();
+    });
+
+    it('throws exception if before element is not LLElement', function() {
+      expect(function() {
+        ll.link(new animatejs.util.LinkedListElement(), {});
+      }).toThrow();
+    });
+
     it('links element to list head', function() {
       var el1 = new animatejs.util.LinkedListElement(),
           el2 = new animatejs.util.LinkedListElement();
@@ -109,6 +122,13 @@ describe('animatejs.util.LinkedList', function() {
   });
 
   describe('unlink', function() {
+
+    it('throws exception if argument is not LLElement', function() {
+      expect(function() {
+        ll.unlink({});
+      }).toThrow();
+    });
+
     it('unlinks element from the middle of the list', function() {
       var el1 = new animatejs.util.LinkedListElement(),
           el2 = new animatejs.util.LinkedListElement(),
@@ -180,6 +200,12 @@ describe('animatejs.util.LinkedList', function() {
       expect(ll.hasElement(el1)).toBe(false);
       ll.link(el1);
       expect(ll.hasElement(el1)).toBe(true);
+    });
+
+    it('throws exception if argument is not LLElement', function() {
+      expect(function() {
+        ll.hasElement({});
+      }).toThrow();
     });
   });
 
