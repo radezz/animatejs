@@ -111,8 +111,8 @@ animatejs.Animation.prototype.set = function(animationTime) {
   if (animationTime >= head['at']) {
     if (!this.isLooping()) {
       if (this.isRunning()) {
-        this.stop();
         this.dispatch('finish');
+        this.stop();
       }
       this.atTime = head['at'];
     } else {

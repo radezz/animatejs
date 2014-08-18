@@ -24,7 +24,6 @@ animatejs.util.typeofObject = function(arg) {
 };
 
 
-
 /**
  * Function returns current timestamp
  * @return {number}
