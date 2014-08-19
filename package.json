@@ -10,7 +10,7 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-contrib-connect": "~0.7.1",
-    "grunt-jsdoc": "0.4.0",
+    "grunt-jsdoc": "0.5.7",
     "grunt-combine": "0.8.3",
     "grunt-istanbul": "0.3.0",
     "grunt-template-jasmine-istanbul": "~0.3.1",

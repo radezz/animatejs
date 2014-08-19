@@ -250,8 +250,8 @@ animatejs.util.Playable.prototype.onFrame = function(frameTs) {
 
 
 /**
+ * Handles browser frame and requests next one
  * @private
- * TODO solve high res timestamp
  */
 animatejs.util.Playable.prototype.onFrame_ = function() {
   'use strict';

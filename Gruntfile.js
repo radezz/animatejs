@@ -50,6 +50,9 @@ module.exports = function(grunt) {
       },
       all: 'src/**/*'
     },
+    clean: {
+      tmp: ['<%= path.tmp %>/*']
+    },
     jasmine: {
       options: {
         specs: '<%= path.src %>/**/*_spec.js'
@@ -149,6 +152,14 @@ module.exports = function(grunt) {
         src: ['src/', 'node_modules/closure-library/'],
         dest: 'tmp/animate.js'
       }
+    },
+    jsdoc : {
+        dist : {
+            src: ['<%= path.src %>/**/*.js', '!<%= path.src %>/**/*_spec.js'],
+            options: {
+                destination: 'tmp/doc'
+            }
+        }
     }
 
   });
