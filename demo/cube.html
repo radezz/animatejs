@@ -40,8 +40,9 @@
             anim.keyFrame(1500, {
                 "rotateX": 360,
                 "rotateY": 360
-            }).on("frame", function(props) {
-                var transform = new animatejs.dom.Transform(elem);
+            }).on("frame", function(frame) {
+                var props = frame.properties,
+                    transform = new animatejs.dom.Transform(elem);
                 transform.rotateX(props.rotateX).rotateY(props.rotateY).apply();
             }).loop();
 

@@ -1,5 +1,6 @@
 goog.provide('animatejs.Animation');
 
+goog.require('animatejs.Frame');
 goog.require('animatejs.KeyFrameList');
 goog.require('animatejs.util');
 goog.require('animatejs.util.IRequestAnimationFrame');
@@ -123,6 +124,8 @@ animatejs.Animation.prototype.set = function(animationTime) {
 
 
 /**
+ * Function resolves keyframe and creates a frame object
+ * which is dispatched with the message
  * @param {animatejs.KeyFrame} keyFrame
  * @private
  */
@@ -166,7 +169,8 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
     }
   }
 
-  this.dispatch('frame', this['properties'], this.changedProperties_, keyFrame);
+  this.dispatch('frame', new animatejs.Frame(this.atTime, this['properties'],
+      this.changedProperties_, nextKeyFrame, keyFrame));
 };
 
 
@@ -224,4 +228,19 @@ animatejs.Animation.prototype.getParentScene = function() {
   'use strict';
   return this.parentScene_;
 };
+
+
+/**
+ * Alias to add listener to a 'frame' message
+ * @param {function(animatejs.Frame)} frameHandler
+ * @return {animatejs.Animation}
+ * @export
+ */
+animatejs.Animation.prototype.onFrame = function(frameHandler) {
+  'use strict';
+  this.on('frame', frameHandler);
+  return this;
+};
+
+
 

@@ -176,14 +176,22 @@ describe('animatejs.Animation', function() {
   });
 
   describe('onFrame', function() {
-
-    it('passes frame timestamp into the animation', function() {
+    it('addss listener to frame message', function(done) {
+      var listener = {
+        onFrame: function(fr) {
+          expect(fr instanceof animatejs.Frame).toBe(true);
+        }
+      };
+      spyOn(listener, 'onFrame');
       animation.keyFrame(10, {
         'prop': 10
       });
       animation.play();
-      animation.onFrame(animatejs.util.now() + 5);
-      expect(animation.properties.prop).toBe(5);
+      animation.onFrame(listener.onFrame);
+      setTimeout(function() {
+        expect(listener.onFrame).toHaveBeenCalled();
+        done();
+      }, 100);
     });
   });
 
@@ -193,7 +201,7 @@ describe('animatejs.Animation', function() {
         'prop': 10
       });
       animation.play();
-      animation.onFrame(animatejs.util.now() + 5);
+      animation.set(5);
       expect(animation.getAtTime()).toBe(5);
     });
   });

@@ -66,9 +66,11 @@
                 "height": 200,
                 "left": 0,
                 "top": 0
-            }).on('frame', function(values, changedProperties, frame) {
+            }).on('frame', function(frame) {
                 console.log('frame');
-                var matrix = 'matrix(1, 0, 0, 1, ' + Math.round(values.left) + ', ' + Math.round(values.top) + ')';
+                var values = frame.properties,
+                    changedProperties = frame.changedProperties,
+                    matrix = 'matrix(1, 0, 0, 1, ' + Math.round(values.left) + ', ' + Math.round(values.top) + ')';
 
                 elem.style.webkitTransform = matrix;
                 elem.style.mozTransform = matrix;
@@ -91,8 +93,10 @@
                'width': 30,
                'left': 500,
                'top': 0
-            }).on('frame', function(values, changedProperties, frame) {
-                var matrix = 'matrix(1, 0, 0, 1, ' + Math.round(values.left) + ', ' + Math.round(values.top) + ')';
+            }).on('frame', function(frame) {
+                var values = frame.properties,
+                    changedProperties = frame.changedProperties,
+                    matrix = 'matrix(1, 0, 0, 1, ' + Math.round(values.left) + ', ' + Math.round(values.top) + ')';
 
                 elem2.style.webkitTransform = matrix;
                 elem2.style.mozTransform = matrix;

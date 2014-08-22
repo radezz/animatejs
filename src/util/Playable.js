@@ -237,25 +237,15 @@ animatejs.util.Playable.prototype.setFrameRequester = function(requester) {
 
 
 /**
- * Function handles browser animation frame
- * @param {number} frameTs
- * @protected
- */
-animatejs.util.Playable.prototype.onFrame = function(frameTs) {
-  'use strict';
-  var frameTime = frameTs - this.lastFrameTs_;
-  this.set(this.atTime + frameTime);
-  this.lastFrameTs_ = frameTs;
-};
-
-
-/**
  * Handles browser frame and requests next one
  * @private
  */
 animatejs.util.Playable.prototype.onFrame_ = function() {
   'use strict';
-  this.onFrame(animatejs.util.now());
+  var frameTs = animatejs.util.now(),
+      frameTime = frameTs - this.lastFrameTs_;
+  this.set(this.atTime + frameTime);
+  this.lastFrameTs_ = frameTs;
   if (this.isRunning()) {
     this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(
         /** @type {animatejs.util.IRequestAnimationFrame} */(window), this.onFrame_);

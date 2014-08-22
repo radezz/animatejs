@@ -18,8 +18,8 @@ describe('animatejs.util', function() {
   });
 
   describe('now', function() {
-    it('returns current timestamp', function() {
-      expect(animatejs.util.now()).toBe(Date.now());
+    it('returns number', function() {
+      expect(typeof(animatejs.util.now())).toBe('number');
     });
   });
 });
