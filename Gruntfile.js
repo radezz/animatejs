@@ -134,7 +134,7 @@ module.exports = function(grunt) {
     },
     closureBuilder: {
       options: {
-        closureLibraryPath: 'node_modules/closure-library/',
+        closureLibraryPath: '<%= path.closure %>',
         namespaces: 'animatejs',
         compilerFile: 'node_modules/closure-compiler/lib/vendor/compiler.jar',
         compile: true,
