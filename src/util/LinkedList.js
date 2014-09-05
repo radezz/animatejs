@@ -2,14 +2,14 @@ goog.provide('animatejs.util.LinkedList');
 
 goog.require('animatejs.util');
 goog.require('animatejs.util.LinkedListElement');
-goog.require('goog.Disposable');
+goog.require('animatejs.util.Listenable');
 
 
 
 /**
  * Linked list
  * @constructor
- * @extends {goog.Disposable}
+ * @extends {animatejs.util.Listenable}
  */
 animatejs.util.LinkedList = function() {
   'use strict';
@@ -33,7 +33,7 @@ animatejs.util.LinkedList = function() {
    */
   this.length_ = 0;
 };
-goog.inherits(animatejs.util.LinkedList, goog.Disposable);
+goog.inherits(animatejs.util.LinkedList, animatejs.util.Listenable);
 
 
 /**
@@ -112,6 +112,7 @@ animatejs.util.LinkedList.prototype.link = function(element, opt_before) {
 
   element.setOwnerList(this);
   this.length_++;
+  this.dispatch('add', element);
 };
 
 
@@ -155,6 +156,7 @@ animatejs.util.LinkedList.prototype.unlink = function(element) {
   element['prev'] = null;
   element.setOwnerList(null);
   this.length_--;
+  this.dispatch('remove', element);
 };
 
 
