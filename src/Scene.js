@@ -31,10 +31,6 @@ animatejs.Scene = function() {
    */
   this.browserFrameHandle_ = null;
 
-  /**
-   * @private
-   */
-  this.duration_ = 0;
 
 };
 goog.inherits(animatejs.Scene, animatejs.util.Playable);
@@ -118,8 +114,8 @@ animatejs.Scene.prototype.add = function(at, animation) {
     });
 
     endTime = at + animation.getDuration();
-    if (endTime > this.duration_) {
-      this.duration_ = endTime;
+    if (endTime > this.duration) {
+      this.duration = endTime;
     }
 
     this.sceneAnimations_.push({
@@ -162,11 +158,10 @@ animatejs.Scene.prototype.getAnimationEntries = function() {
 
 
 /**
- * Function sets scene at provided time
+ * Function handles time provided by playable
  * @param {number} sceneTime
- * @export
  */
-animatejs.Scene.prototype.set = function(sceneTime) {
+animatejs.Scene.prototype.onTime = function(sceneTime) {
   'use strict';
   var animationEntry,
       animationTime,
@@ -175,8 +170,8 @@ animatejs.Scene.prototype.set = function(sceneTime) {
       i,
       l;
 
-  isLastFrame = sceneTime >= this.duration_;
-  this.atTime = isLastFrame ? this.duration_ : sceneTime;
+  isLastFrame = sceneTime >= this.duration;
+  this.atTime = isLastFrame ? this.duration : sceneTime;
   for (i = 0, l = this.sceneAnimations_.length; i < l; i++) {
     animationEntry = this.sceneAnimations_[i];
     if (sceneTime >= animationEntry['at']) {
@@ -242,17 +237,6 @@ animatejs.Scene.prototype.pause = function() {
     }
   }
   animatejs.Scene.superClass_.pause.call(this);
-};
-
-
-/**
- * Function returns duration of the entire scene
- * @return {number}
- * @export
- */
-animatejs.Scene.prototype.getDuration = function() {
-  'use strict';
-  return this.duration_;
 };
 
 

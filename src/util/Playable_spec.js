@@ -4,7 +4,7 @@ describe('animatejs.util.Playable', function() {
   'use strict';
   var playable;
   beforeEach(function() {
-    playable = new animatejs.util.Playable();
+    playable = new animatejs.util.Playable(100);
   });
 
   describe('constructor', function() {

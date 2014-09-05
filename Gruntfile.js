@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           //'--disable 220' //ignore error code 220 from gjslint
           '--strict',
           '--max_line_length=120',
-          '--custom_jsdoc_tags=name'
+          '--custom_jsdoc_tags=name,namespace'
         ],
         reporter: {
           name: 'console'

@@ -8,10 +8,11 @@ goog.require('animatejs.util.Listenable');
 /**
  * Abstract control class for playable objects (Animation and Scene)
  * @constructor
+ * @param {number=} opt_duration
  * @extends {animatejs.util.Listenable}
  * @export
  */
-animatejs.util.Playable = function() {
+animatejs.util.Playable = function(opt_duration) {
   'use strict';
   animatejs.util.Playable.superClass_.constructor.call(this);
 
@@ -40,8 +41,9 @@ animatejs.util.Playable = function() {
   /**
    * @private
    */
-  this.onFrame_ = goog.bind(this.onFrame_, this);
+  this.onBrowserFrame_ = goog.bind(this.onBrowserFrame_, this);
 
+  this.duration = opt_duration || 0;
 };
 goog.inherits(animatejs.util.Playable, animatejs.util.Listenable);
 
@@ -52,6 +54,14 @@ goog.inherits(animatejs.util.Playable, animatejs.util.Listenable);
  * @protected
  */
 animatejs.util.Playable.prototype.atTime = 0;
+
+
+/**
+ * Duration of play
+ * @type {number}
+ * @protected
+ */
+animatejs.util.Playable.prototype.duration = 0;
 
 
 /**
@@ -85,6 +95,17 @@ animatejs.util.Playable.prototype.cancelBrowserFrame_ = function() {
 
 
 /**
+ * Function returns duration of play
+ * @return {number}
+ * @export
+ */
+animatejs.util.Playable.prototype.getDuration = function() {
+  'use strict';
+  return this.duration;
+};
+
+
+/**
  * Function starts playing the object at position in time
  * @export
  * @param {number=} opt_at optional start time
@@ -110,7 +131,7 @@ animatejs.util.Playable.prototype.play = function(opt_at) {
 
   this.lastFrameTs_ = animatejs.util.now();
   this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(
-      /** @type {animatejs.util.IRequestAnimationFrame} */(window), this.onFrame_);
+      /** @type {animatejs.util.IRequestAnimationFrame} */(window), this.onBrowserFrame_);
   return this;
 };
 
@@ -165,8 +186,37 @@ animatejs.util.Playable.prototype.loop = function() {
  */
 animatejs.util.Playable.prototype.set = function(time) {
   'use strict';
+  var stop = false;
+  if (time > this.duration) {
+    if (this.isLooping()) {
+      time = time % this.duration;
+    } else {
+      time = this.duration;
+      stop = true;
+    }
+  }
+
   this.atTime = time;
+  this.onTime(this.atTime);
+
+  if (this.isRunning() && stop) {
+    this.dispatch('finish');
+    this.stop();
+  }
+
   return this;
+};
+
+
+/**
+ * Function handles actions which are happening on specific time.
+ * Should be implemented by child classes
+ * @param {number} time
+ * @protected
+ */
+animatejs.util.Playable.prototype.onTime = function(time) {
+  'use strict';
+  time = 1;
 };
 
 
@@ -240,7 +290,7 @@ animatejs.util.Playable.prototype.setFrameRequester = function(requester) {
  * Handles browser frame and requests next one
  * @private
  */
-animatejs.util.Playable.prototype.onFrame_ = function() {
+animatejs.util.Playable.prototype.onBrowserFrame_ = function() {
   'use strict';
   var frameTs = animatejs.util.now(),
       frameTime = frameTs - this.lastFrameTs_;
@@ -248,7 +298,7 @@ animatejs.util.Playable.prototype.onFrame_ = function() {
   this.lastFrameTs_ = frameTs;
   if (this.isRunning()) {
     this.frameHandle_ = this.requestFrame_.requestAnimationFrame.call(
-        /** @type {animatejs.util.IRequestAnimationFrame} */(window), this.onFrame_);
+        /** @type {animatejs.util.IRequestAnimationFrame} */(window), this.onBrowserFrame_);
   }
 };
 

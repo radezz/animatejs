@@ -47,8 +47,22 @@ animatejs.Animation = function(properties) {
    */
   this.parentScene_ = null;
 
+  this.updateDuration_ = goog.bind(this.updateDuration_, this);
+  this['keyFrames'].on('add', this.updateDuration_);
+  this['keyFrames'].on('remove', this.updateDuration_);
 };
 goog.inherits(animatejs.Animation, animatejs.util.Playable);
+
+
+/**
+ * Function updates duration if key frame is added or removed
+ * @private
+ */
+animatejs.Animation.prototype.updateDuration_ = function() {
+  'use strict';
+  var head = this['keyFrames'].getHead();
+  this.duration = head ? head['at'] : this.duration;
+};
 
 
 /**
@@ -96,10 +110,9 @@ animatejs.Animation.prototype.play = function(opt_at) {
  * @param {number} animationTime
  * @export
  */
-animatejs.Animation.prototype.set = function(animationTime) {
+animatejs.Animation.prototype.onTime = function(animationTime) {
   'use strict';
-  var head = this['keyFrames'].getHead(),
-      keyFrame = this['keyFrames'].getHead();
+  var keyFrame = this['keyFrames'].getHead();
   this.atTime = animationTime;
   while (keyFrame) {
     if (animationTime >= keyFrame['at']) {
@@ -108,7 +121,7 @@ animatejs.Animation.prototype.set = function(animationTime) {
     }
     keyFrame = keyFrame['prev'];
   }
-
+  /*
   if (animationTime >= head['at']) {
     if (!this.isLooping()) {
       if (this.isRunning()) {
@@ -120,6 +133,7 @@ animatejs.Animation.prototype.set = function(animationTime) {
       this.atTime = 0;
     }
   }
+  */
 };
 
 
@@ -171,17 +185,6 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
 
   this.dispatch('frame', new animatejs.Frame(this.atTime, this['properties'],
       this.changedProperties_, nextKeyFrame, keyFrame));
-};
-
-
-/**
- * Function returns duration of the animation
- * @return {number}
- * @export
- */
-animatejs.Animation.prototype.getDuration = function() {
-  'use strict';
-  return this['keyFrames'].getHead()['at'];
 };
 
 
