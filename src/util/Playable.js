@@ -10,6 +10,7 @@ goog.require('animatejs.util.Listenable');
  * @constructor
  * @param {number=} opt_duration
  * @extends {animatejs.util.Listenable}
+ * @abstract
  * @export
  */
 animatejs.util.Playable = function(opt_duration) {
@@ -197,7 +198,7 @@ animatejs.util.Playable.prototype.set = function(time) {
   }
 
   this.atTime = time;
-  this.onTime(this.atTime);
+  this['onTime'](this.atTime);
 
   if (this.isRunning() && stop) {
     this.dispatch('finish');
@@ -213,11 +214,9 @@ animatejs.util.Playable.prototype.set = function(time) {
  * Should be implemented by child classes
  * @param {number} time
  * @protected
+ * @export
  */
-animatejs.util.Playable.prototype.onTime = function(time) {
-  'use strict';
-  time = 1;
-};
+animatejs.util.Playable.prototype.onTime = goog.abstractMethod;
 
 
 /**
@@ -239,6 +238,18 @@ animatejs.util.Playable.prototype.isRunning = function() {
 animatejs.util.Playable.prototype.isPaused = function() {
   'use strict';
   return this.state_ === animatejs.util.Playable.State.PAUSED;
+};
+
+
+/**
+ * Function returns true if 'playable' is idle i.e after
+ * stoping it
+ * @return {boolean}
+ * @export
+ */
+animatejs.util.Playable.prototype.isIdle = function() {
+  'use strict';
+  return this.state_ === animatejs.util.Playable.State.IDLE;
 };
 
 

@@ -36,7 +36,7 @@ animatejs.KeyFrame = function(at, properties, opt_ease) {
    */
   this['ease'] = opt_ease;
 
-  /**
+  /** 
    * @type {number}
    */
   this['at'] = at;

@@ -2,9 +2,15 @@ goog.require('animatejs.util.Playable');
 
 describe('animatejs.util.Playable', function() {
   'use strict';
-  var playable;
+  var playable,
+      Playable;
   beforeEach(function() {
-    playable = new animatejs.util.Playable(100);
+    Playable = function() {
+      animatejs.util.Playable.apply(this, arguments);
+    };
+    goog.inherits(Playable, animatejs.util.Playable);
+    Playable.prototype.onTime = function() {};
+    playable = new Playable(100);
   });
 
   describe('constructor', function() {
