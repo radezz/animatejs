@@ -69,7 +69,8 @@ animatejs.util.Playable.prototype.duration = 0;
  * @type {animatejs.util.IRequestAnimationFrame}
  * @private
  */
-animatejs.util.Playable.prototype.requestFrame_ = animatejs.util;
+animatejs.util.Playable.prototype.requestFrame_ = /** @type {animatejs.util.IRequestAnimationFrame} */
+    (animatejs.util);
 
 
 /**
@@ -213,7 +214,6 @@ animatejs.util.Playable.prototype.set = function(time) {
  * Function handles actions which are happening on specific time.
  * Should be implemented by child classes
  * @param {number} time
- * @protected
  * @export
  */
 animatejs.util.Playable.prototype.onTime = goog.abstractMethod;

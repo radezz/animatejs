@@ -70,7 +70,7 @@ animatejs.Animation.prototype.updateDuration_ = function() {
  * @param {number} at
  * @param {Object} properties
  * @param {function(number):number=} opt_ease
- * @return {animatejs.KeyFrameList}
+ * @return {animatejs.Animation}
  * @export
  */
 animatejs.Animation.prototype.keyFrame = function(at, properties, opt_ease) {
@@ -107,7 +107,7 @@ animatejs.Animation.prototype.play = function(opt_at) {
  * key frame is at 500ms and you call set with 600 animation will be set to state at
  * 500ms.
  *
- * @param {number} animationTime
+ * @override
  * @export
  */
 animatejs.Animation.prototype.onTime = function(animationTime) {
@@ -213,7 +213,7 @@ animatejs.Animation.prototype.disposeInternal = function() {
 
 /**
  * Function sets provided scene as aniamteion's parent scene
- * @param {Object} scene
+ * @param {animatejs.Scene} scene
  * @return {animatejs.Animation}
  */
 animatejs.Animation.prototype.setParentScene = function(scene) {

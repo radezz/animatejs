@@ -124,9 +124,10 @@ animatejs.util.Listenable.prototype.cancel = function(message) {
 /**
  * Function sends message to all listeners
  * @param {string} message
+ * @param {...Object} var_args
  * @export
  */
-animatejs.util.Listenable.prototype.dispatch = function(message) {
+animatejs.util.Listenable.prototype.dispatch = function(message, var_args) { // jshint ignore:line
   'use strict';
   var args = Array.prototype.slice.call(arguments, 1),
       msgReg = this.registry_[message],

@@ -2,6 +2,7 @@ goog.provide('animatejs.Scene');
 
 goog.require('animatejs.Animation');
 goog.require('animatejs.util');
+goog.require('animatejs.util.IRequestAnimationFrame');
 goog.require('animatejs.util.Playable');
 
 
@@ -37,7 +38,8 @@ goog.inherits(animatejs.Scene, animatejs.util.Playable);
 
 
 /**
- * @typedef
+ * @type {Object}
+ * @const
  */
 animatejs.Scene.DUMMY_FRAME_REQUEST = {
   'requestAnimationFrame': goog.nullFunction,
@@ -106,7 +108,8 @@ animatejs.Scene.prototype.add = function(at, animation) {
     }
 
     animation.setParentScene(this);
-    animation.setFrameRequester(animatejs.Scene.DUMMY_FRAME_REQUEST);
+    animation.setFrameRequester(/** @type {animatejs.util.IRequestAnimationFrame} */
+        (animatejs.Scene.DUMMY_FRAME_REQUEST));
     animation.addOnDisposeCallback(function() {
       if (that.has(animation)) {
         that.remove(animation);
@@ -140,7 +143,8 @@ animatejs.Scene.prototype.remove = function(animation) {
       animation.stop();
     }
     animation.setParentScene(null);
-    animation.setFrameRequester(animatejs.util);
+    animation.setFrameRequester(/** @type {animatejs.util.IRequestAnimationFrame} */
+        (animatejs.util));
     this.sceneAnimations_.splice(i, 1);
   }
 };
@@ -224,6 +228,7 @@ animatejs.Scene.prototype.stop = function() {
 
 /**
  * Function pauses animations in current scene
+ * @override
  * @export
  */
 animatejs.Scene.prototype.pause = function() {
@@ -236,7 +241,7 @@ animatejs.Scene.prototype.pause = function() {
       animation.pause();
     }
   }
-  animatejs.Scene.superClass_.pause.call(this);
+  return animatejs.Scene.superClass_.pause.call(this);
 };
 
 
