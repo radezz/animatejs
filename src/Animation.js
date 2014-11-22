@@ -190,7 +190,7 @@ animatejs.Animation.prototype.resolveKeyFrame_ = function(keyFrame) {
 
 /**
  * Function destroys this obejcts. After calling destroy object
- * will not be usable but will be safetly disposed. This will stop
+ * will not be usable but will be safetl ydisposed. This will stop
  * the animation and cleanup all attached listeners and keyframes.
  * @export
  */

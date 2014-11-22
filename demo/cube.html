@@ -33,12 +33,12 @@
 
             var elem = document.getElementById('cube'),
                 anim = new animatejs.Animation({
-                    "rotateX": 0,
+                    //"rotateX": 0,
                     "rotateY": 0
                 });
 
             anim.keyFrame(1500, {
-                "rotateX": 360,
+                //"rotateX": 360,
                 "rotateY": 360
             }).on("frame", function(frame) {
                 var props = frame.properties,
