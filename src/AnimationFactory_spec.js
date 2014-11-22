@@ -122,6 +122,22 @@ describe('animatejs.AnimationFactory', function() {
         animatejs.Animation.create('{spec}');
       }).toThrow();
     });
+    
+    it('throws exception if less than 2 frames are specified', function() {
+      expect(function() {
+        animatejs.Animation.create([]);
+      }).toThrow();
+      expect(function() {
+        animatejs.Animation.create([
+          {
+            at: '0%',
+            properties: {
+              'prop1': 1
+            }
+          }
+        ]);
+      }).toThrow();
+    });
   });
 
 });

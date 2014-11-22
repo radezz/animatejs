@@ -22,6 +22,11 @@ animatejs.Animation.create = function(keyFrameSpecs, opt_duration) {
 
   validateFrameTimes_(keyFrameSpecs, opt_duration);
   fixPropertySet_(keyFrameSpecs);
+
+  if (keyFrameSpecs.length <= 1) {
+    throw new Error('at least 2 frames needs to be specified');
+  }
+
   animation = new animatejs.Animation(keyFrameSpecs[0]['properties']);
   for (i = 0, l = keyFrameSpecs.length; i < l; i++) {
     keyFrameSpec = keyFrameSpecs[i];
