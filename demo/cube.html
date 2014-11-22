@@ -32,7 +32,7 @@
         <script>
 
             var elem = document.getElementById('cube'),
-                anim = new animatejs.Animation({
+                anim; /* = new animatejs.Animation({
                     //"rotateX": 0,
                     "rotateY": 0
                 });
@@ -44,7 +44,29 @@
                 var props = frame.properties,
                     transform = new animatejs.dom.Transform(elem);
                 transform.rotateX(props.rotateX).rotateY(props.rotateY).apply();
-            }).loop();
+            }).loop();*/
+
+            anim = animatejs.Animation.create([
+                {
+                    at: '0%',
+                    properties: {
+                        rotateY: 0,
+                        rotateX: 0
+                    }
+                },
+                {
+                    at: '100%',
+                    properties: {
+                        rotateY: 360,
+                        rotateX: 0
+                    },
+                    ease: animatejs.ease.easeoutquad
+                }
+            ], 2000).on('frame', function(frame) {
+                var props = frame.properties,
+                    transform = new animatejs.dom.Transform(elem);
+                transform.rotateX(props.rotateX).rotateY(props.rotateY).apply();
+            });
 
             window.addEventListener('click', function() {
                 anim.play();
