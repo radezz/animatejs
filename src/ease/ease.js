@@ -1,5 +1,7 @@
 goog.provide('animatejs.ease');
 
+goog.require('goog.math.Bezier');
+
 
 /**
  * Linear ease
@@ -66,4 +68,31 @@ animatejs.ease.easeoutcirc = function(p) {
 };
 
 
+/**
+ * Creates cubic bezier ease function
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ *
+ * @export
+ * @return {Function}
+ */
+animatejs.ease.createBezier = function(x1, y1, x2, y2) {
+  'use strict';
+  if (!goog.isNumber(x1) ||
+      !goog.isNumber(y1) ||
+      !goog.isNumber(x2) ||
+      !goog.isNumber(y2)) {
+    throw new TypeError('all coords must be numbers');
+  }
+
+  x1 = (x1 < 0) ? 0 : (x1 > 1) ? 1 : x1;
+  x2 = (x2 < 0) ? 0 : (x2 > 1) ? 1 : x2;
+
+  var bezier = new goog.math.Bezier(0, 0, x1, y1, x2, y2, 1, 1);
+  return function(p) {
+    return bezier.solveYValueFromXValue(p);
+  };
+};
 

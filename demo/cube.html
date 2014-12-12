@@ -51,27 +51,51 @@
                     at: '0%',
                     properties: {
                         rotateY: 0,
-                        rotateX: 0
+                        rotateX: 0,
+                        moveX: 0,
+                        moveY: 0
                     }
+                },
+                {
+                    at: '60%',
+                    properties: {
+                        rotateY: 200,
+                        rotateX: 100,
+                        moveX: 50,
+                        moveY: 260
+                    },
+                    ease: animatejs.ease.easeoutquad
+                },
+                {
+                    at: '80%',
+                    properties: {
+                        rotateY: 360,
+                        rotateX: 0,
+                        moveX: 50,
+                        moveY: 290
+                    },
+                    ease: animatejs.ease.easeoutquad
                 },
                 {
                     at: '100%',
                     properties: {
-                        rotateY: 360,
-                        rotateX: 0
+                        rotateY: 0,
+                        rotateX: 0,
+                        moveX: 0,
+                        moveY: 0
                     },
-                    ease: animatejs.ease.easeoutquad
+                    ease: animatejs.ease.createBezier(.15,.94,.8,1.35)
                 }
-            ], 2000).on('frame', function(frame) {
+            ], 5000).on('frame', function(frame) {
                 var props = frame.properties,
                     transform = new animatejs.dom.Transform(elem);
-                transform.rotateX(props.rotateX).rotateY(props.rotateY).apply();
+                transform.rotateX(props.rotateX).rotateY(props.rotateY).translate(props.moveX, props.moveY, 0).apply();
             });
 
             window.addEventListener('click', function() {
-                anim.play();
+                anim.loop().play();
             });
 
         </script>
     </body>
-</html>
+</htm

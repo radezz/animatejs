@@ -98,9 +98,18 @@ animatejs.dom.Transform.prototype.rotateZ = function(angle) {
  */
 animatejs.dom.Transform.prototype.translate = function(x, y, z) {
   'use strict';
-  this.translate_[0] += x;
-  this.translate_[1] += y;
-  this.translate_[2] += z;
+  if (goog.isNumber(x)) {
+    this.translate_[0] += x;
+  }
+
+  if (goog.isNumber(y)) {
+    this.translate_[1] += y;
+  }
+
+  if (goog.isNumber(z)) {
+    this.translate_[2] += z;
+  }
+
   return this;
 };
 

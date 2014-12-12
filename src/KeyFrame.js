@@ -2,6 +2,7 @@ goog.provide('animatejs.KeyFrame');
 
 goog.require('animatejs.ease');
 goog.require('animatejs.util.LinkedListElement');
+goog.require('goog.object');
 
 
 
@@ -42,6 +43,18 @@ animatejs.KeyFrame = function(at, properties, opt_ease) {
   this['at'] = at;
 };
 goog.inherits(animatejs.KeyFrame, animatejs.util.LinkedListElement);
+
+
+/**
+ * Function creates a clone of a key frame. It preserves
+ * property values
+ * @export
+ * @return {animatejs.KeyFrame}
+ */
+animatejs.KeyFrame.prototype.clone = function() {
+  'use strict';
+  return new animatejs.KeyFrame(this['at'], goog.object.clone(this['data']), this['ease']);
+};
 
 
 /**

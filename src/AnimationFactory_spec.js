@@ -122,7 +122,7 @@ describe('animatejs.AnimationFactory', function() {
         animatejs.Animation.create('{spec}');
       }).toThrow();
     });
-    
+
     it('throws exception if less than 2 frames are specified', function() {
       expect(function() {
         animatejs.Animation.create([]);
