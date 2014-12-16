@@ -3,7 +3,7 @@ goog.provide('animatejs.Frame');
 
 
 /**
- * Frame defines a state of properties in time
+ * Frame defines a state of properties at certain time
  * @param {number} at defines the time value from the beginning of the animation
  * @param {Object} properties current properties values (key=value pairs)
  * @param {Array.<string>} changedProperties names of properties changed from last frame

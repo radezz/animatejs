@@ -40,6 +40,14 @@ describe('animatejs.ease', function() {
       expect(animatejs.ease.easeoutcirc(1)).toBe(1);
     });
   });
+
+  describe('createBezier', function() {
+    it('returns modified number', function() {
+      var bezier = animatejs.ease.createBezier(0.2, 0.2, 0.8, 0.8);
+      expect(bezier(0)).toBe(0);
+      expect(bezier(1)).toBe(1);
+    });
+  });
 });
 
 

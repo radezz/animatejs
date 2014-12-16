@@ -3,6 +3,7 @@ goog.provide('animatejs.util.LinkedList');
 goog.require('animatejs.util');
 goog.require('animatejs.util.LinkedListElement');
 goog.require('animatejs.util.Listenable');
+goog.require('animatejs.util.error');
 
 
 
@@ -77,13 +78,15 @@ animatejs.util.LinkedList.prototype.getTail = function() {
  */
 animatejs.util.LinkedList.prototype.link = function(element, opt_before) {
   'use strict';
+  var lle = 'LinkedListElement';
+
   if (!animatejs.util.instanceOf(element, animatejs.util.LinkedListElement)) {
-    throw new TypeError();
+    throw new TypeError(animatejs.util.error.typeErrorMsg(2, lle));
   }
 
   if (opt_before &&
       !animatejs.util.instanceOf(opt_before, animatejs.util.LinkedListElement)) {
-    throw new TypeError();
+    throw new TypeError(animatejs.util.error.typeErrorMsg(2, lle));
   }
 
   var ownerList = element.getOwnerList();

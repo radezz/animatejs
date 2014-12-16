@@ -1,5 +1,6 @@
 goog.provide('animatejs.util.Listenable');
 
+goog.require('animatejs.util.error');
 goog.require('goog.Disposable');
 
 
@@ -28,16 +29,15 @@ goog.inherits(animatejs.util.Listenable, goog.Disposable);
  * Function validates on, off, once arguments
  * @param {string} message
  * @param {Function} listener
- * @param {string} errMessage
  * @private
  */
-animatejs.util.Listenable.prototype.validateListenerArgs_ = function(message, listener, errMessage) {
+animatejs.util.Listenable.prototype.validateListenerArgs_ = function(message, listener) {
   'use strict';
   if (!goog.isString(message)) {
-    throw new TypeError(errMessage);
+    throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.type.STRING));
   }
   if (!goog.isFunction(listener)) {
-    throw new TypeError(errMessage);
+    throw new TypeError(animatejs.util.error.typeErrorMsg(2, animatejs.util.error.type.FUNCTION));
   }
 };
 
@@ -52,7 +52,7 @@ animatejs.util.Listenable.prototype.validateListenerArgs_ = function(message, li
 animatejs.util.Listenable.prototype.on = function(message, listener) {
   'use strict';
 
-  this.validateListenerArgs_(message, listener, '');
+  this.validateListenerArgs_(message, listener);
 
   if (!this.registry_[message]) {
     this.registry_[message] = [];
@@ -74,7 +74,7 @@ animatejs.util.Listenable.prototype.off = function(message, listener) {
   'use strict';
   var msgReg,
       i;
-  this.validateListenerArgs_(message, listener, '');
+  this.validateListenerArgs_(message, listener);
   msgReg = this.registry_[message];
   if (msgReg) {
     i = msgReg.length;
@@ -99,7 +99,7 @@ animatejs.util.Listenable.prototype.off = function(message, listener) {
 animatejs.util.Listenable.prototype.once = function(message, listener) {
   'use strict';
   var that = this;
-  this.validateListenerArgs_(message, listener, '');
+  this.validateListenerArgs_(message, listener);
   function onceListener(messageObj) {
     listener(messageObj);
     that.off(message, onceListener);

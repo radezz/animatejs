@@ -92,7 +92,7 @@ animatejs.Animation.prototype.play = function(opt_at) {
   'use strict';
 
   if (this['keyFrames'].getLength() <= 1) {
-    throw new Error(''); //TODO: errorz!
+    throw new Error('Animation needs at least 2 keyframes to play');
   }
 
   animatejs.Animation.superClass_.play.call(this, opt_at);
@@ -121,19 +121,6 @@ animatejs.Animation.prototype.onTime = function(animationTime) {
     }
     keyFrame = keyFrame['prev'];
   }
-  /*
-  if (animationTime >= head['at']) {
-    if (!this.isLooping()) {
-      if (this.isRunning()) {
-        this.dispatch('finish');
-        this.stop();
-      }
-      this.atTime = head['at'];
-    } else {
-      this.atTime = 0;
-    }
-  }
-  */
 };
 
 

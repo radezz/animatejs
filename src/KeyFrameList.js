@@ -23,7 +23,7 @@ animatejs.KeyFrameList = function(properties) {
   'use strict';
 
   if (!goog.isObject(properties)) {
-    throw new TypeError();
+    throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.type.OBJECT));
   }
 
   //init linked list
@@ -71,15 +71,17 @@ animatejs.KeyFrameList.prototype.initFrameProperties_ = function(properties) {
  */
 animatejs.KeyFrameList.prototype.link = function(keyFrame, opt_before) {
   'use strict';
-  var i = this['frameProperties'].length;
+  var i = this['frameProperties'].length,
+      propertyName;
   if (this.getTail()) {
     /*
      * Validate keyFrame properties. Properties in key frames
      * must be same
      */
     while (i--) {
-      if (!keyFrame['data'].hasOwnProperty(this['frameProperties'][i])) {
-        throw new Error();
+      propertyName = this['frameProperties'][i];
+      if (!keyFrame['data'].hasOwnProperty(propertyName)) {
+        throw new Error(propertyName + ' does not exist');
       }
     }
   }

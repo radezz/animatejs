@@ -4,6 +4,7 @@ goog.require('animatejs.Animation');
 goog.require('animatejs.util');
 goog.require('animatejs.util.IRequestAnimationFrame');
 goog.require('animatejs.util.Playable');
+goog.require('animatejs.util.error');
 
 
 
@@ -91,11 +92,11 @@ animatejs.Scene.prototype.add = function(at, animation) {
       endTime;
 
   if (!goog.isNumber(at)) {
-    throw new TypeError('number');
+    throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.NUMBER));
   }
 
   if (!animatejs.util.instanceOf(animation, animatejs.Animation)) {
-    throw new TypeError('animation required');
+    throw new TypeError(animatejs.util.error.typeErrorMsg(2, 'Animation'));
   }
 
   if (this.has(animation)) {

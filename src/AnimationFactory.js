@@ -17,7 +17,7 @@ animatejs.Animation.create = function(keyFrameSpecs, opt_duration) {
       i,
       l;
   if (!goog.isArray(keyFrameSpecs)) {
-    throw new TypeError('key frame specs needs to be array');
+    throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.type.ARRAY));
   }
 
   validateFrameTimes_(keyFrameSpecs, opt_duration);
@@ -54,7 +54,7 @@ function validateFrameTimes_(keyFrameSpecs, opt_duration) {
     parsed = parseInt(atTime, 10);
     if (goog.isString(atTime) && atTime.indexOf('%') !== -1) {
       if (!goog.isNumber(opt_duration)) {
-        throw new Error('duration needed when usng % values');
+        throw new Error('duration needed when using % values');
       }
       if (isNaN(parsed)) {
         throw new Error('invalid % value');

@@ -3,6 +3,7 @@ goog.provide('animatejs.util.error');
 
 /**
  * Function returns formatted error message
+ * and it is used for type errors
  * @param {number} argNumber
  * @param {string} typeRequired
  * @return {string}
@@ -20,7 +21,9 @@ animatejs.util.error.typeErrorMsg = function(argNumber, typeRequired) {
 animatejs.util.error.type = {
   NUMBER: 'a number',
   FUNCTION: 'a function',
-  OBJECT: 'an object'
+  OBJECT: 'an object',
+  STRING: 'a string',
+  ARRAY: 'an array'
 };
 
 

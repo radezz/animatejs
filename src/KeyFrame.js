@@ -2,6 +2,7 @@ goog.provide('animatejs.KeyFrame');
 
 goog.require('animatejs.ease');
 goog.require('animatejs.util.LinkedListElement');
+goog.require('animatejs.util.error');
 goog.require('goog.object');
 
 
@@ -19,13 +20,13 @@ animatejs.KeyFrame = function(at, properties, opt_ease) {
   'use strict';
 
   if (!goog.isNumber(at)) {
-    throw new TypeError();
+    throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.type.NUMBER));
   } else if (at < 0) {
     throw new Error();
   }
 
   if (opt_ease && !goog.isFunction(opt_ease)) {
-    throw new TypeError();
+    throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.type.FUNCTION));
   }
 
   animatejs.KeyFrame.validateProperties(properties);
@@ -69,12 +70,12 @@ animatejs.KeyFrame.validateProperties = function(properties) {
       hasProperties = false;
 
   if (!animatejs.util.typeofObject(properties)) {
-    throw new TypeError();
+    throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.type.OBJECT));
   }
 
   for (key in properties) {
     if (properties.hasOwnProperty(key) && !goog.isNumber(properties[key])) {
-      throw new TypeError();
+      throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.type.NUMBER));
     }
     hasProperties = true;
   }
