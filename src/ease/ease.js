@@ -2,6 +2,12 @@ goog.provide('animatejs.ease');
 
 goog.require('goog.math.Bezier');
 
+/**
+ * Easing functions
+ * @name animatejs.ease
+ * @namespace
+ */
+
 
 /**
  * Linear ease

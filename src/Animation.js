@@ -190,6 +190,7 @@ animatejs.Animation.prototype.destroy = function() {
 /**
  * Function manages object disposal, is handled by goog.dispose.
  * @protected
+ * @access private
  */
 animatejs.Animation.prototype.disposeInternal = function() {
   'use strict';

@@ -1,4 +1,10 @@
 goog.provide('animatejs.util.error');
+/**
+ * Namespace provides error messages utilities
+ * @namespace
+ * @name animatejs.util.error
+ * @access private
+ */
 
 
 /**

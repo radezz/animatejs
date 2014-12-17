@@ -8,9 +8,11 @@ goog.require('animatejs.util.error');
 
 
 /**
- * Linked list
+ * Linked list. (Internal only)
  * @constructor
  * @extends {animatejs.util.Listenable}
+ * @export
+ * @access private
  */
 animatejs.util.LinkedList = function() {
   'use strict';
@@ -41,6 +43,7 @@ goog.inherits(animatejs.util.LinkedList, animatejs.util.Listenable);
  * Function return length of the linked list
  * @return {number}
  * @protected
+ * @access private
  */
 animatejs.util.LinkedList.prototype.getLength = function() {
   'use strict';
@@ -52,6 +55,7 @@ animatejs.util.LinkedList.prototype.getLength = function() {
  * Function return the head of the list
  * @return {animatejs.util.LinkedListElement}
  * @protected
+ * @access private
  */
 animatejs.util.LinkedList.prototype.getHead = function() {
   'use strict';
@@ -63,6 +67,7 @@ animatejs.util.LinkedList.prototype.getHead = function() {
  * Function return the tail of the list
  * @return {animatejs.util.LinkedListElement}
  * @protected
+ * @access private
  */
 animatejs.util.LinkedList.prototype.getTail = function() {
   'use strict';
@@ -75,6 +80,7 @@ animatejs.util.LinkedList.prototype.getTail = function() {
  * @param {animatejs.util.LinkedListElement} element
  * @param {animatejs.util.LinkedListElement=} opt_before
  * @protected
+ * @access private
  */
 animatejs.util.LinkedList.prototype.link = function(element, opt_before) {
   'use strict';
@@ -122,6 +128,7 @@ animatejs.util.LinkedList.prototype.link = function(element, opt_before) {
 /**
  * Function removes element from the list
  * @param {animatejs.util.LinkedListElement} element
+ * @access private
  */
 animatejs.util.LinkedList.prototype.unlink = function(element) {
   'use strict';
@@ -168,6 +175,7 @@ animatejs.util.LinkedList.prototype.unlink = function(element) {
  * @param {animatejs.util.LinkedListElement} element
  * @return {boolean}
  * @protected
+ * @access private
  */
 animatejs.util.LinkedList.prototype.hasElement = function(element) {
   'use strict';
@@ -179,8 +187,9 @@ animatejs.util.LinkedList.prototype.hasElement = function(element) {
 
 
 /**
- * Function is called on object destruction. Unlinks all element
+ * Function is called on object destruction. Unlinks all elements
  * @protected
+ * @access private
  */
 animatejs.util.LinkedList.prototype.disposeInternal = function() {
   'use strict';

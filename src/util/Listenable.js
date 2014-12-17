@@ -6,10 +6,11 @@ goog.require('goog.Disposable');
 
 
 /**
- * Listenable is a simple message listener and dispatcher
+ * Listenable is a simple message listener and dispatcher. (Internal only)
  * @constructor
  * @extends {goog.Disposable}
  * @export
+ * @access private
  */
 animatejs.util.Listenable = function() {
   'use strict';
@@ -112,6 +113,7 @@ animatejs.util.Listenable.prototype.once = function(message, listener) {
 /**
  * Function unregisters listeners for chosen message
  * @param {string} message
+ * @export
  */
 animatejs.util.Listenable.prototype.cancel = function(message) {
   'use strict';
@@ -143,6 +145,7 @@ animatejs.util.Listenable.prototype.dispatch = function(message, var_args) { // 
 
 /**
  * @protected
+ * @access private
  */
 animatejs.util.Listenable.prototype.disposeInternal = function() {
   'use strict';

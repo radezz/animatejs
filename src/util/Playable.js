@@ -6,12 +6,13 @@ goog.require('animatejs.util.Listenable');
 
 
 /**
- * Abstract control class for playable objects (Animation and Scene)
+ * Abstract control class for playable objects (Animation and Scene). (Internal only)
  * @constructor
  * @param {number=} opt_duration
  * @extends {animatejs.util.Listenable}
  * @abstract
  * @export
+ * @access private
  */
 animatejs.util.Playable = function(opt_duration) {
   'use strict';
@@ -53,6 +54,7 @@ goog.inherits(animatejs.util.Playable, animatejs.util.Listenable);
  * Current playable time
  * @type {number}
  * @protected
+ * @access private
  */
 animatejs.util.Playable.prototype.atTime = 0;
 
@@ -61,6 +63,7 @@ animatejs.util.Playable.prototype.atTime = 0;
  * Duration of play
  * @type {number}
  * @protected
+ * @access private
  */
 animatejs.util.Playable.prototype.duration = 0;
 
@@ -290,6 +293,7 @@ animatejs.util.Playable.prototype.getState = function() {
  * Function sets frame requester for the current animation
  * @param {animatejs.util.IRequestAnimationFrame} requester
  * @protected
+ * @access private
  */
 animatejs.util.Playable.prototype.setFrameRequester = function(requester) {
   'use strict';
@@ -317,6 +321,7 @@ animatejs.util.Playable.prototype.onBrowserFrame_ = function() {
 /**
  * Function disposes the object
  * @protected
+ * @access private
  */
 animatejs.util.Playable.prototype.disposeInternal = function() {
   'use strict';

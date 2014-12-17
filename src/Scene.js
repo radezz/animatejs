@@ -40,7 +40,7 @@ goog.inherits(animatejs.Scene, animatejs.util.Playable);
 
 /**
  * @type {Object}
- * @const
+ * @access private
  */
 animatejs.Scene.DUMMY_FRAME_REQUEST = {
   'requestAnimationFrame': goog.nullFunction,
@@ -249,6 +249,7 @@ animatejs.Scene.prototype.pause = function() {
 /**
  * Function releases objects references
  * @protected
+ * @access private
  */
 animatejs.Scene.prototype.disposeInternal = function() {
   'use strict';

@@ -68,6 +68,7 @@ animatejs.KeyFrameList.prototype.initFrameProperties_ = function(properties) {
  * @param {animatejs.KeyFrame} keyFrame
  * @param {animatejs.KeyFrame=} opt_before
  * @protected
+ * @access private
  */
 animatejs.KeyFrameList.prototype.link = function(keyFrame, opt_before) {
   'use strict';
@@ -129,6 +130,7 @@ animatejs.KeyFrameList.prototype.remove = animatejs.KeyFrameList.prototype.unlin
 /**
  * Disposes the object
  * @protected
+ * @access private
  */
 animatejs.KeyFrameList.prototype.disposeInternal = function() {
   'use strict';

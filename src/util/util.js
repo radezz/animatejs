@@ -1,5 +1,12 @@
 goog.provide('animatejs.util');
 
+/**
+ * Namespace provides utility functions and classes
+ * @namespace
+ * @name animatejs.util
+ * @access private
+ */
+
 
 /**
  * Helper for checking instanceof

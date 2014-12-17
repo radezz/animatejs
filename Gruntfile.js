@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           //'--disable 220' //ignore error code 220 from gjslint
           '--strict',
           '--max_line_length=120',
-          '--custom_jsdoc_tags=name,namespace,abstract'
+          '--custom_jsdoc_tags=name,namespace,abstract,public,access'
         ],
         reporter: {
           name: 'console'
@@ -160,7 +160,7 @@ module.exports = function(grunt) {
                 destination: 'tmp/doc',
                 template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
                 configure : "jsdoc.conf.json",
-                private: false
+                private: true
             }
         }
     }
