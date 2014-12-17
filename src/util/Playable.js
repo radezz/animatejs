@@ -19,11 +19,13 @@ animatejs.util.Playable = function(opt_duration) {
   animatejs.util.Playable.superClass_.constructor.call(this);
 
   /**
+   * @type {number}
    * @private
    */
   this.state_ = animatejs.util.Playable.State.IDLE;
 
   /**
+   * @type {boolean}
    * @private
    */
   this.loop_ = false;

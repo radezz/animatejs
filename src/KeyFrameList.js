@@ -30,10 +30,11 @@ animatejs.KeyFrameList = function(properties) {
   animatejs.KeyFrameList.superClass_.constructor.call(this);
 
   /**
-  * List of initial properties used to check against
-  * when inserting new key frames
-  * @type {Array.<string>}
-  */
+   * List of initial properties used to check against
+   * when inserting new key frames
+   * @type {Array.<string>}
+   * @name animatejs.KeyFrameList#frameProperties
+   */
   this['frameProperties'] = [];
 
   //set list of properties
@@ -68,7 +69,6 @@ animatejs.KeyFrameList.prototype.initFrameProperties_ = function(properties) {
  * @param {animatejs.KeyFrame} keyFrame
  * @param {animatejs.KeyFrame=} opt_before
  * @protected
- * @access private
  */
 animatejs.KeyFrameList.prototype.link = function(keyFrame, opt_before) {
   'use strict';

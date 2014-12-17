@@ -14,16 +14,19 @@ animatejs.util.LinkedListElement = function(opt_data) {
   'use strict';
 
   /**
+   * @name animatejs.util.LinkedListElement#data
    * @type {*}
    */
   this['data'] = opt_data || null;
 
   /**
+   * @name animatejs.util.LinkedListElement#next
    * @type {aniamtejs.util.LinkedListElement}
    */
   this['next'] = null;
 
   /**
+   * @name animatejs.util.LinkedListElement#prev
    * @type {animatejs.util.LinkedListElement}
    */
   this['prev'] = null;

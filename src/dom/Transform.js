@@ -89,7 +89,7 @@ animatejs.dom.Transform.prototype.rotateZ = function(angle) {
 
 
 /**
- *
+ * Function translates on provided axises
  * @param {number} x
  * @param {number} y
  * @param {number} z

@@ -23,6 +23,8 @@ animatejs.Animation = function(properties) {
   animatejs.Animation.superClass_.constructor.call(this);
 
   /**
+   * List of key frames for current animation.
+   * @name animatejs.Animation#keyFrames
    * @type {animatejs.KeyFrameList}
    */
   this['keyFrames'] = new animatejs.KeyFrameList(goog.object.clone(properties));
@@ -31,7 +33,10 @@ animatejs.Animation = function(properties) {
   }, this);
 
   /**
+   * Current calculated property values depending on
+   * the current atTime
    * @type {Object}
+   * @name animatejs.Animation#properties
    */
   this['properties'] = properties;
 
@@ -48,6 +53,7 @@ animatejs.Animation = function(properties) {
   this.parentScene_ = null;
 
   this.updateDuration_ = goog.bind(this.updateDuration_, this);
+  this.play = goog.bind(this.play, this);
   this['keyFrames'].on('add', this.updateDuration_);
   this['keyFrames'].on('remove', this.updateDuration_);
 };
@@ -203,6 +209,7 @@ animatejs.Animation.prototype.disposeInternal = function() {
  * Function sets provided scene as aniamteion's parent scene
  * @param {animatejs.Scene} scene
  * @return {animatejs.Animation}
+ * @access private
  */
 animatejs.Animation.prototype.setParentScene = function(scene) {
   'use strict';
@@ -214,6 +221,7 @@ animatejs.Animation.prototype.setParentScene = function(scene) {
 /**
  * Function returns current animation's parent scene or null
  * @return {animatejs.Scene}
+ * @access private
  */
 animatejs.Animation.prototype.getParentScene = function() {
   'use strict';
@@ -233,5 +241,19 @@ animatejs.Animation.prototype.onFrame = function(frameHandler) {
   return this;
 };
 
+
+/**
+ * Function pipes this animation to another animation.
+ * Current animation will be executed after the other animation
+ * is finished.
+ * @param {animatejs.Animation} animation
+ * @return {animatejs.Animation}
+ * @export
+ */
+animatejs.Animation.prototype.pipeTo = function(animation) {
+  'use strict';
+  animation.once('finish', this.play);
+  return this;
+};
 
 

@@ -145,7 +145,8 @@ module.exports = function(grunt) {
           define: ["'goog.DEBUG=false'"],
           warning_level: 'verbose',
           summary_detail_level: 3,
-          output_wrapper: '\'(function(){%output%}).call(this);\''
+          output_wrapper: '\'(function(){%output%}).call(this);\'',
+          extra_annotation_name: 'access'
         }
       },
       build: {

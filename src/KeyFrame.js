@@ -35,11 +35,13 @@ animatejs.KeyFrame = function(at, properties, opt_ease) {
 
   /**
    * @type {function(number):number}
+   * @name animatejs.KeyFrame#ease
    */
   this['ease'] = opt_ease;
 
   /**
    * @type {number}
+   * @name animatejs.KeyFrame#at
    */
   this['at'] = at;
 };

@@ -24,6 +24,7 @@ animatejs.Frame = function(at, properties, changedProperties, nextKeyFrame, prev
   /**
    * Properties and their values at current time
    * @type {Object}
+   *
    */
   this['properties'] = properties;
 
