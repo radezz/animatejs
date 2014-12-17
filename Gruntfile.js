@@ -160,7 +160,7 @@ module.exports = function(grunt) {
                 destination: 'tmp/doc',
                 template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
                 configure : "jsdoc.conf.json",
-                private: true
+                private: false
             }
         }
     }

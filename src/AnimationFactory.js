@@ -20,8 +20,8 @@ animatejs.Animation.create = function(keyFrameSpecs, opt_duration) {
     throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.type.ARRAY));
   }
 
-  validateFrameTimes_(keyFrameSpecs, opt_duration);
-  fixPropertySet_(keyFrameSpecs);
+  animatejs.Animation.validateFrameTimes_(keyFrameSpecs, opt_duration);
+  animatejs.Animation.fixPropertySet_(keyFrameSpecs);
 
   if (keyFrameSpecs.length <= 1) {
     throw new Error('at least 2 frames needs to be specified');
@@ -43,7 +43,7 @@ animatejs.Animation.create = function(keyFrameSpecs, opt_duration) {
  * @param {number=} opt_duration
  * @private
  */
-function validateFrameTimes_(keyFrameSpecs, opt_duration) {
+animatejs.Animation.validateFrameTimes_ = function(keyFrameSpecs, opt_duration) {
   'use strict';
   var i = keyFrameSpecs.length,
       parsed,
@@ -54,7 +54,7 @@ function validateFrameTimes_(keyFrameSpecs, opt_duration) {
     parsed = parseInt(atTime, 10);
     if (goog.isString(atTime) && atTime.indexOf('%') !== -1) {
       if (!goog.isNumber(opt_duration)) {
-        throw new Error('duration needed when using % values');
+        throw new Error('duration needed when usng % values');
       }
       if (isNaN(parsed)) {
         throw new Error('invalid % value');
@@ -76,7 +76,7 @@ function validateFrameTimes_(keyFrameSpecs, opt_duration) {
   keyFrameSpecs.sort(function(keyFrameA, keyFrameB) {
     return keyFrameA['at'] - keyFrameB['at'];
   });
-}
+};
 
 
 /**
@@ -85,7 +85,7 @@ function validateFrameTimes_(keyFrameSpecs, opt_duration) {
  * @param {Array.<Object>} keyFrameSpecs
  * @private
  */
-function fixPropertySet_(keyFrameSpecs) {
+animatejs.Animation.fixPropertySet_ = function(keyFrameSpecs) {
   'use strict';
   var keyFrameSpec,
       updateFrameSpec,
@@ -120,6 +120,6 @@ function fixPropertySet_(keyFrameSpecs) {
       }
     }
   }
-}
+};
 
 
