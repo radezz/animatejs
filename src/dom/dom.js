@@ -44,7 +44,7 @@ animatejs.dom.CSS = {
 
 /**
  * Prefixed
- * @enum {string}
+ * @type {Object}
  */
 animatejs.dom.CSS_PREFIXED = (function() {
   'use strict';

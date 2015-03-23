@@ -92,7 +92,7 @@ animatejs.Scene.prototype.add = function(at, animation) {
       endTime;
 
   if (!goog.isNumber(at)) {
-    throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.NUMBER));
+    throw new TypeError(animatejs.util.error.typeErrorMsg(1, animatejs.util.error.type.NUMBER));
   }
 
   if (!animatejs.util.instanceOf(animation, animatejs.Animation)) {
@@ -165,6 +165,7 @@ animatejs.Scene.prototype.getAnimationEntries = function() {
 /**
  * Function handles time provided by playable
  * @param {number} sceneTime
+ * @export
  */
 animatejs.Scene.prototype.onTime = function(sceneTime) {
   'use strict';
@@ -279,6 +280,9 @@ animatejs.Scene.prototype.destroy = function() {
  *    animation: (animatejs.Animation)
  * }}
  * @name animatejs.Scene.AnimationEntry
+ * @property {number} at
+ * @property {number} end
+ * @property {animatejs.Animation} animation
  */
 animatejs.Scene.AnimationEntry; // jshint ignore:line
 

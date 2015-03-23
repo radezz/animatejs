@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           //'--disable 220' //ignore error code 220 from gjslint
           '--strict',
           '--max_line_length=120',
-          '--custom_jsdoc_tags=name,namespace,abstract,public,access'
+          '--custom_jsdoc_tags=name,namespace,abstract,public,access,property'
         ],
         reporter: {
           name: 'console'
@@ -146,7 +146,8 @@ module.exports = function(grunt) {
           warning_level: 'verbose',
           summary_detail_level: 3,
           output_wrapper: '\'(function(){%output%}).call(this);\'',
-          extra_annotation_name: 'access'
+          extra_annotation_name: 'access',
+          formatting: 'PRETTY_PRINT'
         }
       },
       build: {
@@ -161,11 +162,19 @@ module.exports = function(grunt) {
                 destination: 'tmp/doc',
                 template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
                 configure : "jsdoc.conf.json",
-                private: false
+                private: true
             }
         }
+    },
+    jsdoc2md: {
+      oneOutputFile: {
+        options: {
+          index:true
+        },
+        src: "src/*.js",
+        dest: "tmp/documentation.md"
+      }
     }
-
   });
 
   grunt.registerTask('default', ['closureDepsWriter']);
@@ -175,6 +184,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['deps', 'jasmine:test']);
   grunt.registerTask('coverage', ['instrument', 'closureDepsWriter:depsCoverage', 'jasmine:coverage']);
   grunt.registerTask('build', ['lint', 'deps', 'jasmine:test', 'closureBuilder:build']);
+
+
 
 
   grunt.loadNpmTasks('grunt-contrib-connect');
@@ -188,5 +199,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-istanbul');
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-combine');
+  grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
+
 
 };

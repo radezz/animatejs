@@ -96,7 +96,8 @@ animatejs.util.Playable.State = {
 animatejs.util.Playable.prototype.cancelBrowserFrame_ = function() {
   'use strict';
   if (this.frameHandle_) {
-    this.requestFrame_.cancelAnimationFrame.call(window, this.frameHandle_);
+    this.requestFrame_.cancelAnimationFrame.call(window,/** @type {animatejs.util.IRequestAnimationFrame} */
+        (this.frameHandle_));
   }
 };
 
